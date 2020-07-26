@@ -1,0 +1,60 @@
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+	<!-- Main Content -->
+	<div id="content">
+
+		<!-- Header -->
+	  	<%- include('partials/header.ejs') -%>
+	  	<!-- End of Header -->
+
+	  	<!-- Begin Page Content -->
+  		<div class="container-fluid">
+			<div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Users List</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="user_datatable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>S.No</th> 
+                      <th>Name</th>
+                      <th>DOB</th>
+                      <th>Mobile Number</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>S.No</th> 
+                      <th>Name</th>
+                      <th>DOB</th>
+                      <th>Mobile Number</th>
+                      <th>Action</th>                      
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                   <%for(var i=0; i<data.length; i++) {%> 
+                      <tr>
+                        <td><%=i+1%></td>
+                        <td><a style="color:blue;" href="javascript:void(0)"><%=data[i].first_name+ ' '+data[i].last_name %></a></td>
+                        <td><%=data[i].birth_date %></td>
+                        <td><%=data[i].mobile_number %></td>
+                        <td>
+	                        <% if(data[i].status === 1){ %>
+	                        	<a style="background-color:#e18932;color:white;padding:5px;" href="/admin/usersActivateDeactivate/<%=data[i].id%>/<%=data[i].status%>">De-Activate</a>
+	                        <% }else{ %>
+	                        	<a style="background-color:#e18932;color:white;padding:5px;" href="/admin/usersActivateDeactivate/<%=data[i].id%>/<%=data[i].status%>">Activate</a>
+	                        <% } %>
+                        </td>
+                      </tr>
+                    <% } %>    
+                  </tbody>                  
+                </table>
+              </div>
+            </div>
+          </div>
+		</div>
+	</div>
+	<!-- End of Main Content -->

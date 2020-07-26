@@ -1,0 +1,59 @@
+<div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg" style="margin-top: 8rem !important;">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <!-- <div class="col-lg-6 d-none d-lg-block" style="/*background: url('../user_assets/admin/img/rummy1.jpg'); background-size: cover; background-position: center;*/"></div> -->
+
+
+              <div class="col-lg-9" style="margin: 0 auto;">
+                
+                <!-- Loader -->
+                <div class="loading" style="display: none">
+                    <div class="loader"></div>
+                </div>
+
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Admin</h1>
+                    <div class="profile-notification-msg p-2">
+                      <p style="background-color:green;color:white;"> <%= messages.successmsg %> </p>
+                      <p style="background-color:#E04040;color:white;"> <%= messages.errormsg %> </p>
+                    </div>
+                  </div>
+                  <form class="user" id="request-login" method="POST" action="#" onsubmit="admin/login">
+                    <div class="form-group">
+                        <input type="email" class="form-control form-control-user input-email" id="email" aria-describedby="email" placeholder="Enter Email Address..." name="email">
+                        <span id="error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                      <input type="password" class="form-control form-control-user input-password" id="password" aria-describedby="password" placeholder="Password" name="password">
+                        <span id="error"></span>
+                    </div>
+
+                    <input type="submit" name="login" value="Login" class="btn btn-primary btn-user btn-block">
+                  </form>
+
+                  <hr>
+
+                  <div class="text-center">
+                    <a class="small" href="javascript:void(0)">Forgot Password?</a>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>    
+  

@@ -1,0 +1,115 @@
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+	
+  <!-- Main Content -->
+	<div id="content">
+
+		  <!-- Header -->
+	  	<%- include('partials/header.ejs') -%>
+	  	<!-- End of Header -->
+
+	  	<!-- Begin Page Content -->
+  		<div class="container-fluid">
+			  <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <div class="col-md-6" style="float:left">
+                <h6 class="m-0 font-weight-bold text-primary">Sub Admins List</h6>
+              </div>
+              <div class="col-md-6" style="float:right;margin-right: -445px;">
+                <button class="addSubAdmin" style="color:white;background-color:#2F4EB4;" data-toggle="modal" data-target="#addSubAdminModal">Add Sub Admin</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>S.No</th>	
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Position</th>
+                      <th>Action</th>                      
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>S.No</th> 
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Position</th>
+                      <th>Action</th>                      
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                   <%for(var i=0; i<data.length; i++) {%> 
+                      <tr>
+                        <td><%=i+1%></td>
+                        <td><a style="color:blue;" href="javascript:void(0)"><%=data[i].first_name+ ' '+data[i].last_name %></a></td>
+                        <td><%=data[i].email %></td>
+                        <td><%=data[i].present_position %></td>
+                        <td>
+	                        <% if(data[i].status === 1){ %>
+	                        	<a style="background-color:#e18932;color:white;padding:5px;" href="/admin/subAdminActivateDeactivate/<%=data[i].id%>/<%=data[i].status%>">De-Activate</a>
+	                        <% }else{ %>
+	                        	<a style="background-color:#e18932;color:white;padding:5px;" href="/admin/subAdminActivateDeactivate/<%=data[i].id%>/<%=data[i].status%>">Activate</a>
+	                        <% } %>
+                        </td>
+                      </tr>
+                    <% } %>    
+                  </tbody>                  
+                </table>
+              </div>
+            </div>
+        </div>
+		  </div>
+      <!-- End Page Content -->
+	</div>
+  <!-- Add SubAdmin Modal -->
+  <div class="modal fade" id="addSubAdminModal" tabindex="-1" role="dialog" aria-labelledby="addSubAdminModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addSubAdminModalLabel">Add Sub Admin</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="profile-notification-msg p-2">
+                <p class="successmsg" style="background-color:green;color:white;"><%= messages.successmsg %></p>
+                <p class="errormsg" style="background-color:#E04040;color:white;"><%= messages.errormsg %></p>
+              </div>
+              <form class="createSubAdminForm" name="createSubAdminForm" method="POST" action="/admin/createSubAdmin">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text"  class="form-control"  name="first_name" placeholder="Enter First Name"/>
+                </div>
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text"  class="form-control"  name="last_name" placeholder="Enter Last Name"/>
+                </div>
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email"  class="form-control"  name="email" placeholder="Enter Email"/>
+                </div>              
+                <div class="form-group">
+                  <label>Password</label>
+                  <input type="password"  class="form-control"  name="password" placeholder="Enter Password"/>
+                </div>
+                <div class="form-group">
+                  <label>Present Position</label>
+                  <input type="text"  class="form-control"  name="present_position" placeholder="Enter Present Position"/>
+                </div>              
+                <div class="form-group text-center">  
+                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+  </div>
+  <!-- // Add SubAdmin Modal -->    
+
+	<!-- End of Main Content -->
