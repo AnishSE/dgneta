@@ -12,13 +12,13 @@
           <!-- Nav Item - User Information -->
           <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+              <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%= currentUser.first_name + " " + currentUser.last_name %></span>
               <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
              
-              <a class="dropdown-item" href="my_profile">
+              <a class="dropdown-item" href="myProfile">
                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                 My Profile
               </a>
@@ -50,20 +50,20 @@
           </div>
           <div class="modal-body">
             <div class="profile-notification-msg p-2">
-              <p style="background-color:green;color:white;"><%= messages.successmsg %></p>
-              <p style="background-color:#E04040;color:white;"><%= messages.errormsg %></p>
+              <p class="successmsg"><%= messages.successmsg %></p>
+              <p class="errormsg"><%= messages.errormsg %></p>
             </div>
             <form name="changePasswordForm" method="POST" action="/admin/changePassword">
               <div class="form-group">
                 <label>New Password</label>
-                <input type="text"  class="form-control"  name="new_password" placeholder="Enter New Password"/>
+                <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Enter New Password"/>
               </div>
               <div class="form-group">
                 <label>Confirm Password</label>
-                <input type="text"  class="form-control"  name="confirm_password" placeholder="Enter Confirm Password"/>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Enter Confirm Password"/>
               </div>
               <div class="form-group text-center">  
-                <button class="btn btn-secondary" type="reset" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 <button class="btn btn-primary" type="submit">Submit</button>
               </div>
             </form>            

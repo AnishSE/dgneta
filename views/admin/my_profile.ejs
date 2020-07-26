@@ -1,0 +1,87 @@
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+
+	<!-- Main Content -->
+	<div id="content">
+
+		  <!-- Header -->
+	  	<%- include('partials/header.ejs') -%>
+	  	<!-- End of Header -->
+
+	  	<!-- Begin Page Content -->
+  		<div class="container-fluid">
+        <div class="row content-header py-3">
+          <div class="col-md-6" style="float:left">
+            <h1 style="padding-left:27px">My Profile</h1>
+          </div>
+          <div class="col-md-6" style="float:right;margin-right: -445px;">
+            <button class="editProfile" style="color:white;background-color:#224abe;"><a href="editProfile" style="color:white">Edit Profile</a></button>
+          </div>  
+        </div>
+        
+        <div class="row">    
+          <div class="col-md-7 ">
+              <div class="box view_profile_detail">
+                  <div class="box-body">
+                      
+                      <div class="container">
+                          <div class="row">
+                              <div class="col-md-3 head">First Name</div>
+                              <div class="col-md-9 row_value"><%= data.first_name %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">Last Name</div>
+                              <div class="col-md-9 row_value"><%= data.last_name %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">Facebook URL</div>
+                              <div class="col-md-9 row_value"><%= data.facebook_url %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">Phone</div>
+                              <div class="col-md-9 row_value"><%= data.phone %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">Email</div>
+                              <div class="col-md-9 row_value"><%= data.email %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">DOB</div>
+                              <div class="col-md-9 row_value"><%= data.dob %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">Education</div>
+                              <div class="col-md-9 row_value"><%= data.education %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">Blood Group</div>
+                              <div class="col-md-9 row_value"><%= data.blood_group %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">Present Position</div>
+                              <div class="col-md-9 row_value"><%= data.present_position %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">Past Position</div>
+                              <div class="col-md-9 row_value"><%= data.past_position %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">Roles</div>
+                              <div class="col-md-9 row_value"><%= data.roles == 1 ? 'Admin' : 'Sub Admin' %></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-3 head">Status</div>
+                              <div class="col-md-9 row_value"><%= data.status == 1 ? 'Active' : 'De-Active' %></div>
+                          </div>
+                      </div>
+                      
+                  </div>
+              </div>
+          </div>
+        </div>
+
+		  </div>
+      <!-- End Page Content -->
+
+	</div>
+	<!-- End of Main Content -->

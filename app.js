@@ -42,15 +42,13 @@ app.use(bodyParser.json({limit: '5000mb',extended: true}));
 app.use(bodyParser.urlencoded({limit: '5000mb',extended: true}));
 
 /*Setting up layouts*/
-
-/*Setting up layouts*/
 app.use(function(req, res, next) {   
   const original_request = req.originalUrl;
   const string_array     = original_request.split('/'); 
   global.baseUrl         = req.protocol + '://' + req.headers.host;  
   res.locals.currentUser = req.session.currentUser;
 
-  if( string_array['1'] == 'admin'  && (string_array['2'] == 'login' || string_array['2'] == 'forgetPassword' || string_array['2'] == 'resetPassword' )){
+  if( string_array['1'] == 'admin'  && (string_array['2'] == 'login' || string_array['2'] == 'forgotPassword' )){
       app.set('layout', 'layout');
   }else if(string_array['1'] == 'admin'){
       app.set('layout', 'adminLayout');
@@ -70,6 +68,7 @@ app.use(flash());
 
 app.use(function(err, req, res, next) {
   res.locals.message     = err.message;
+  res.locals.currentUser = req.session.currentUser;
   res.status(err.status || 500);
   res.render('error');  
 });

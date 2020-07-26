@@ -13,10 +13,10 @@
 			  <div class="card shadow mb-4">
             <div class="card-header py-3">
               <div class="col-md-6" style="float:left">
-                <h6 class="m-0 font-weight-bold text-primary">Sub Admins List</h6>
+                <h5 class="m-0 font-weight-bold text-primary">Sub Admins List</h5>
               </div>
               <div class="col-md-6" style="float:right;margin-right: -445px;">
-                <button class="addSubAdmin" style="color:white;background-color:#2F4EB4;" data-toggle="modal" data-target="#addSubAdminModal">Add Sub Admin</button>
+                <button class="addSubAdmin" style="color:white;background-color:#224abe;" data-toggle="modal" data-target="#addSubAdminModal">Add Sub Admin</button>
               </div>
             </div>
             <div class="card-body">
@@ -76,8 +76,8 @@
             </div>
             <div class="modal-body">
               <div class="profile-notification-msg p-2">
-                <p class="successmsg" style="background-color:green;color:white;"><%= messages.successmsg %></p>
-                <p class="errormsg" style="background-color:#E04040;color:white;"><%= messages.errormsg %></p>
+                <p class="successmsg"><%= messages.successmsg %></p>
+                <p class="errormsg"><%= messages.errormsg %></p>
               </div>
               <form class="createSubAdminForm" name="createSubAdminForm" method="POST" action="/admin/createSubAdmin">
                 <div class="form-group">

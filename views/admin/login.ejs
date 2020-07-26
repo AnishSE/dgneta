@@ -23,11 +23,11 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Admin</h1>
                     <div class="profile-notification-msg p-2">
-                      <p style="background-color:green;color:white;"> <%= messages.successmsg %> </p>
-                      <p style="background-color:#E04040;color:white;"> <%= messages.errormsg %> </p>
+                      <p class="successmsg"> <%= messages.successmsg %> </p>
+                      <p class="errormsg"> <%= messages.errormsg %> </p>
                     </div>
                   </div>
-                  <form class="user" id="request-login" method="POST" action="#" onsubmit="admin/login">
+                  <form class="user" id="request-login" method="POST" action="login">
                     <div class="form-group">
                         <input type="email" class="form-control form-control-user input-email" id="email" aria-describedby="email" placeholder="Enter Email Address..." name="email">
                         <span id="error"></span>
@@ -44,7 +44,7 @@
                   <hr>
 
                   <div class="text-center">
-                    <a class="small" href="javascript:void(0)">Forgot Password?</a>
+                    <a class="small" href="forgotPassword">Forgot Password?</a>
                   </div>
 
                 </div>
