@@ -277,21 +277,24 @@ module.exports = (app, wagner) => {
         }    
     }); 
 
-	router.get('/birthday', async (req, res, next) =>{
+	router.get('/birthday', session_auth.admin, async (req, res, next) =>{
         try{ 
-            let conds = {id : 1/*req.session.currentUser.id*/} /*Set from sessions*/
+            let conds = {id : req.session.currentUser.id} /*Set from sessions*/
             const users = await wagner.get('SubadminManager').birthday(conds);
-
-            res.status(200).json({ success: '1', message: "success", data: users });
-
+            if(users){
+               res.render('admin/followers_birthday',{data: users});  
+            }else{
+                res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.'});                    
+            }
         }catch(e){
             console.log(e);
             res.status(500).json({ success: '0', message: "failure", data: e });
         } 
 	});
-    router.get('/appointmentList', /*session_auth.admin,*/ async (req, res, next)=> {
+
+    router.get('/appointmentList', session_auth.admin, async (req, res, next)=> {
         try{ 
-            let conds = {id : /*req.session.currentUser.id*/2} /*Set from sessions*/
+            let conds = {id : req.session.currentUser.id} /*Set from sessions*/
             const appointmentList = await wagner.get('SubadminManager').appointmentList(req.body, conds);
             if(appointmentList){
                 //console.log(appointmentList);
