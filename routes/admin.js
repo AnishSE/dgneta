@@ -6,16 +6,18 @@ const md5                         = require('md5');
 const session_auth                = require('../middleware/session_auth');
 const multer                      = require('multer');
 const storage                     = multer.diskStorage({
-    limits: { fileSize: 10000 },
-    filename: (req, file, cb)=>{
-     cb(null, Date.now() + file.originalname)
-    }
-})
+                                            limits: { fileSize: 10000 },
+                                            filename: (req, file, cb)=>{
+                                                    cb(null, Date.now() + file.originalname)
+                                            }
+                                    });
+
 const upload                      = multer({storage,
-  fileFilter: (req, file, cb) => {
-  cb(null, Date.now() + file.originalname)
-  }
-});
+                                        fileFilter: (req, file, cb) => {
+                                            cb(null, Date.now() + file.originalname)
+                                        }
+                                    });
+
 module.exports = (app, wagner) => {
     
 	router.get('/login', function(req, res, next) {	  
@@ -217,11 +219,12 @@ module.exports = (app, wagner) => {
         }    
     }); 
 
-    router.post('/imageUpdate', upload.single('file-input'), async (req, res, next)=> {
+    router.post('/imageUpdate', upload.single('profile_image'), session_auth.admin, async (req, res, next)=> {
         try{ 
-            let conds = {id : 1} /*Set from sessions*/
+            
+            let conds = {id : req.session.currentUser.id} /*Set from sessions*/
             let params; 
-            const photo_url = await wagner.get('UserManager').saveMediaS3(req);
+            const photo_url = await wagner.get('UserManager').saveMediaS3(req);            
             if(req.body.imageStatus  == 1){
                 params = {
                     cover_photo_url : photo_url
@@ -232,7 +235,12 @@ module.exports = (app, wagner) => {
                 }                
             }    
             const subAdmin = await wagner.get('SubadminManager').update(params, conds);
-            
+            // if(subAdmin){
+                // req.flash('successmsg', 'Mail sent on registered Email Id.');
+                res.redirect('/admin/myProfile');                                                
+            // }else{
+            //     res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
+            // }
         }catch(e){
             console.log(e);
             res.status(500).json({ success: '0', message: "failure", data: e });
@@ -269,6 +277,33 @@ module.exports = (app, wagner) => {
         }    
     }); 
 
+	router.get('/birthday', async (req, res, next) =>{
+        try{ 
+            let conds = {id : 1/*req.session.currentUser.id*/} /*Set from sessions*/
+            const users = await wagner.get('SubadminManager').birthday(conds);
+
+            res.status(200).json({ success: '1', message: "success", data: users });
+
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        } 
+	});
+    router.get('/appointmentList', /*session_auth.admin,*/ async (req, res, next)=> {
+        try{ 
+            let conds = {id : /*req.session.currentUser.id*/2} /*Set from sessions*/
+            const appointmentList = await wagner.get('SubadminManager').appointmentList(req.body, conds);
+            if(appointmentList){
+                //console.log(appointmentList);
+                res.status(200).json({ success: '1', message: "success", data: appointmentList });
+            }else{
+                res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
+            }
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    }); 
     router.get('/logout', (req, res, next)=> {
         req.session.destroy();
         res.redirect('/admin/login');

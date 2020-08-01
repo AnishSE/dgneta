@@ -1,3 +1,98 @@
+<style>
+  .dt-avatar-wrapper {    
+    display: flex;    
+    align-items: center;
+  }
+  button.editImageSection, button.editCoverPhotoSection {
+    background: transparent;
+    border: transparent;
+    text-transform: none;
+  }
+  .m-0 {
+    margin: 0 !important;
+  }
+  .row.m-0 {    
+    display: flex;    
+    flex-wrap: wrap;    
+  }
+  .dt-avatar-wrapper .small-12.medium-2.large-2.columns {
+    position: relative;
+  }
+  .circle {
+    border-radius: 1000px !important;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+  }
+  .square{
+    overflow: hidden;
+    width: 200px;
+    height: 120px;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+  }
+  .profile-pic, .cover_photo {
+    display: flex;
+    object-fit: cover;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  img {
+    max-width: 100%;    
+    vertical-align: middle;
+    border-style: none;
+  }
+  .dt-avatar-wrapper .small-12.medium-2.large-2.columns i {
+    color: #000;
+    background: #fff;
+    width: 25px;
+    height: 25px;
+    right: 1px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 12px;
+    font-size: 14px;
+  }
+  .p-image {
+    flex: 0 0 100%;
+    color: #666666;
+    transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+  }
+  .file-upload, .file-cover-upload {
+    display: none;
+  }
+  input {
+    overflow: visible;
+  }
+  input, button, select, optgroup, textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .upload_photo1 .p-image .image_form .upload_photo, .upload_photo1 .p-image .image_form .upload_cover_photo {
+    margin-left:15px;
+    margin-top: 50px;
+    font-size: 13px;
+    padding: 4px 30px;
+    border-radius: 3px;
+  }
+  .btn-red {
+    background: #e73834;
+    border: 0;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #fff;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+
+</style>
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
 
@@ -12,8 +107,88 @@
   		<div class="container-fluid">
 
         <div class="row content-header py-3">
-          <div class="col-md-6" style="float:left">
+          <div class="col-md-4" style="float:left">
             <h1>Edit Profile</h1>
+          </div>
+          <div class="col-md-4">
+            <div class="dt-avatar-wrapper">
+                <button class="editImageSection" data-toggle="modal" data-target="#photoModal">
+                  <% if(data.profile_image !='' && data.profile_image !=null) {%>
+                    <div class="row m-0">
+                      <div class="small-12 medium-2 large-2 columns">
+                        <div class="circle">
+                          <!-- User Profile Image -->
+                          <img class="profile-pic" src="<%= data.profile_image %>">
+                          <i class="fa fa-camera upload-button"></i>
+                          <!-- Default Image -->
+                          <!-- <i class="fa fa-user fa-5x"></i> -->
+                        </div>
+                      </div>
+                    </div>
+                  <% } else {%>
+                    <div class="row">
+                      <div class="small-12 medium-2 large-2 columns">
+                        <div class="circle">
+                          <!-- User Profile Image -->
+                          <img class="profile-pic" src="../user_assets/admin/img/defaultImage.jpg">
+                          <i class="fa fa-camera upload-button"></i>
+                          <!-- Default Image -->
+                          <!-- <i class="fa fa-user fa-5x"></i> -->
+                        </div>
+                      </div>
+                    </div> 
+                  <% } %>
+                </button>
+                <div class="dt-avatar-info ml-6 upload_photo1" >                  
+                  <p class="dt-avatar-name display-4 d-block font-weight-light profile-name-text"></p>
+                  <div class="p-image">
+                    <form name="image_form" class="image_form" method='post' enctype="multipart/form-data"
+                      action="/admin/imageUpdate">
+                      <input class="file-upload" type="file" name="profile_image" accept="image/*" />
+                      <input type="hidden" name="imageStatus" value="0" />
+                      <input type="submit" name="upload_photo" class="btn-red upload_photo" value="Upload Photo"/>
+                    </form>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-md-4" style="float:right">
+            <div class="dt-avatar-wrapper">
+                <button class="editCoverPhotoSection" data-toggle="modal" data-target="#coverPhotoModal">
+                  <% if(data.cover_photo_url !='' && data.cover_photo_url !=null) {%>
+                    <div class="row m-0">
+                      <div class="small-12 medium-2 large-2 columns">
+                        <div class="square">
+                          <!-- User Profile Image -->
+                          <img class="cover_photo" src="<%= data.cover_photo_url %>">
+                          <i class="fa fa-camera cover-upload-button"></i>                          
+                        </div>
+                      </div>
+                    </div>
+                  <% } else {%>
+                    <div class="row">
+                      <div class="small-12 medium-2 large-2 columns">
+                        <div class="square">
+                          <!-- User Profile Image -->
+                          <img class="cover_photo" src="../user_assets/admin/img/defaultImage.jpg">
+                          <i class="fa fa-camera cover-upload-button"></i>                          
+                        </div>
+                      </div>
+                    </div> 
+                  <% } %>
+                </button>
+                <div class="dt-avatar-info ml-6 upload_photo1" >                  
+                  <p class="dt-avatar-name display-4 d-block font-weight-light profile-name-text"></p>
+                  <div class="p-image">
+                    <form name="image_form" class="image_form" method='post' enctype="multipart/form-data"
+                      action="/admin/imageUpdate">
+                      <input class="file-cover-upload" type="file" name="profile_image" accept="image/*" />
+                      <input type="hidden" name="imageStatus" value="1" />
+                      <input type="submit" name="upload_cover_photo" class="btn-red upload_cover_photo" value="Upload Cover Photo"/>
+                    </form>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
         

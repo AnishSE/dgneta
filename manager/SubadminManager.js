@@ -2,6 +2,8 @@ const nodemailer      = require('nodemailer');
 const config          = require('config');
 const jwt             = require('jsonwebtoken');
 const asyncLoop       = require('node-async-loop');
+const moment          = require('moment'); 
+const sequelize         = require("sequelize");
 
 class SubadminManager {
 
@@ -12,6 +14,7 @@ class SubadminManager {
     	this.Gallerymedia = wagner.get("Gallerymedia");
     	this.Comments = wagner.get("Comments");
     	this.Mail = wagner.get('MailHelper');
+    	this.Appointments = wagner.get('Appointments');
     }
 
 	findOne(req){
@@ -176,7 +179,102 @@ class SubadminManager {
 		    }
     	})
   	}	
-}
 
+	birthday(req){
+    	return new Promise(async (resolve, reject)=>{
+
+		    try{
+			    var month = moment().month() + 1;
+			    var today = moment().date();
+			    this.Users.findAll({
+				    attributes: ['id','first_name', 'last_name', 'birth_date'],
+				    where: {
+				    	id : req.id,
+				        $and: [
+				        	sequelize.where(sequelize.fn('month', sequelize.col("birth_date")), month),				        
+				      	],
+				      	$or: [
+				        	sequelize.where(sequelize.fn('day', sequelize.col("birth_date")), today),
+				      	]
+				    }
+			    }).then(function (result) {
+			    	let jsonData;
+			    	let data = [];
+			    	let count = 0;
+			    	if(result.length>0){
+				    	asyncLoop(result, async (val, next)=>{
+				    		jsonData = {
+				    			id : val.id,
+				    			first_name : val.first_name,
+				    			last_name  : val.last_name
+				    		}
+				    		data.push(jsonData);
+				    		
+				    		if(count == result.length -1){
+				    			resolve(data);
+				    		}
+				    		count++;
+				    		next();
+				    	})			    		
+			    	}else{
+			    		resolve(data);
+			    	}
+			    });  	
+			}catch(e){
+		        console.log(e);
+		        reject(e);
+		    }
+    	})    
+	}
+
+	appointmentList(req,conds){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+	      		let conds = {
+	      			$or: [
+				        {
+				            status: 
+				            {
+				                $eq: 1
+				            }
+				        }, 
+				        {
+				            status: 
+				            {
+				                $eq: 2
+				            }
+				        }, 
+				        {
+				            status: 
+				            {
+				                $gt: 3
+				            }
+				        }
+				    ]
+	      		}
+		        let appointments  = await this.Appointments.findAll( {where : conds, order: [['id', 'DESC']] });
+		    	let data = [];
+		    	let count = 0;
+		    	if(appointments.length>0){
+			    	asyncLoop(appointments, async (val, next)=>{
+
+			    		data.push(val);
+			    		
+			    		if(count == appointments.length -1){
+			    			resolve(data);
+			    		}
+			    		count++;
+			    		next();
+			    	})			    		
+		    	}else{
+		    		resolve(data);
+		    	}
+	      	} catch(error){
+	      		console.log(error);
+	        	reject(error);
+	        }
+	    })
+	}	
+}
 
 module.exports  = SubadminManager;	

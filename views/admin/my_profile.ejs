@@ -1,3 +1,65 @@
+<style>
+  .dt-avatar-wrapper {    
+    display: flex;    
+    align-items: center;
+  }
+  button.editImageSection, button.editCoverPhotoSection {
+    background: transparent;
+    border: transparent;
+    text-transform: none;
+  }
+  .m-0 {
+    margin: 0 !important;
+  }
+  .row.m-0 {    
+    display: flex;    
+    flex-wrap: wrap;    
+  }
+  .dt-avatar-wrapper .small-12.medium-2.large-2.columns {
+    position: relative;
+  }
+  .circle {
+    border-radius: 1000px !important;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+  }
+  .square{
+    overflow: hidden;
+    width: 200px;
+    height: 120px;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+  }
+  .profile-pic, .cover_photo {
+    display: flex;
+    object-fit: cover;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  img {
+    max-width: 100%;    
+    vertical-align: middle;
+    border-style: none;
+  }
+  .dt-avatar-wrapper .small-12.medium-2.large-2.columns i {
+    color: #000;
+    background: #fff;
+    width: 25px;
+    height: 25px;
+    right: 1px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 12px;
+    font-size: 14px;
+  }
+  
+</style>
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
 
@@ -11,16 +73,16 @@
 	  	<!-- Begin Page Content -->
   		<div class="container-fluid">
         <div class="row content-header py-3">
-          <div class="col-md-6" style="float:left">
+          <div class="col-md-10" style="float:left">
             <h1 style="padding-left:27px">My Profile</h1>
           </div>
-          <div class="col-md-6" style="float:right;margin-right: -445px;">
+          <div class="col-md-2" style="float:right;">
             <button class="editProfile" style="color:white;background-color:#224abe;"><a href="editProfile" style="color:white">Edit Profile</a></button>
           </div>  
         </div>
         
         <div class="row">    
-          <div class="col-md-7 ">
+          <div class="col-md-6 ">
               <div class="box view_profile_detail">
                   <div class="box-body">
                       
@@ -78,6 +140,64 @@
                   </div>
               </div>
           </div>
+
+          <!-- User Profile Image Section -->
+          <div class="col-md-3">
+            <div class="dt-avatar-wrapper">
+                <button class="editImageSection" data-toggle="modal" data-target="#photoModal">
+                  <% if(data.profile_image !='' && data.profile_image !=null) {%>
+                    <div class="row m-0">
+                      <div class="small-12 medium-2 large-2 columns">
+                        <div class="circle">                          
+                          <img class="profile-pic" src="<%= data.profile_image %>">
+                          <!--<i class="fa fa-camera upload-button"></i>-->                          
+                        </div>
+                      </div>
+                    </div>
+                  <% } else {%>
+                    <div class="row">
+                      <div class="small-12 medium-2 large-2 columns">
+                        <div class="circle">                          
+                          <img class="profile-pic" src="../user_assets/admin/img/defaultImage.jpg">
+                          <!--<i class="fa fa-camera upload-button"></i>-->                          
+                        </div>
+                      </div>
+                    </div> 
+                  <% } %>
+                </button>                
+            </div>
+          </div>
+          <!-- //User Profile Image Section -->
+
+          <!-- Cover Photo Section -->
+          <div class="col-md-3">
+            <div class="dt-avatar-wrapper">
+                <button class="editCoverPhotoSection" data-toggle="modal" data-target="#coverPhotoModal">
+                  <% if(data.cover_photo_url !='' && data.cover_photo_url !=null) {%>
+                    <div class="row m-0">
+                      <div class="small-12 medium-2 large-2 columns">
+                        <div class="square">
+                          <!-- Cover Photo -->
+                          <img class="cover_photo" src="<%= data.cover_photo_url %>">
+                          <!--<i class="fa fa-camera cover-upload-button"></i> -->                         
+                        </div>
+                      </div>
+                    </div>
+                  <% } else {%>
+                    <div class="row">
+                      <div class="small-12 medium-2 large-2 columns">
+                        <div class="square">
+                          <!-- Cover Photo -->
+                          <img class="cover_photo" src="../user_assets/admin/img/defaultImage.jpg">
+                          <!--<i class="fa fa-camera cover-upload-button"></i>  -->                        
+                        </div>
+                      </div>
+                    </div> 
+                  <% } %>
+                </button>                
+              </div>
+          </div>
+          <!-- //Cover Photo Section -->
         </div>
 
 		  </div>
