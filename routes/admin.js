@@ -68,18 +68,20 @@ module.exports = (app, wagner) => {
     router.post('/forgotPassword',  [
         check('email').notEmpty().withMessage('Email is required').bail().isEmail().withMessage('Email is not valid')         
     ],async (req, res, next)=> {
-        const payload    = req.body;
+        const payload    = req.body;        
         const admin = await wagner.get('SubadminManager').findOne(payload);
-        if(admin){
-            console.log(admin.id);
+        
+        if(admin){            
             payload.id = admin.id;
             const sendMail = await wagner.get('SubadminManager').forgetPassword(payload);    
             if(sendMail){
-                console.log("Mail Sent");
+                console.log("Mail Sent");                
+                req.flash('successmsg', 'Mail sent on registered Email Id.');
+                res.redirect('/admin/forgotPassword');                                
             }
         }else{
             req.flash('errormsg', 'Email id not registered.');
-            res.redirect('/users/forgetPassword');                
+            res.redirect('/admin/forgotPassword');                
         }      
     });
 

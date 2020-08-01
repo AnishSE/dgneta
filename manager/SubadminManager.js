@@ -11,6 +11,7 @@ class SubadminManager {
     	this.Gallery = wagner.get("Gallery");
     	this.Gallerymedia = wagner.get("Gallerymedia");
     	this.Comments = wagner.get("Comments");
+    	this.Mail = wagner.get('MailHelper');
     }
 
 	findOne(req){
@@ -156,6 +157,25 @@ class SubadminManager {
 	        }
 	    })
 	}	
+	forgetPassword(req){
+    	return new Promise(async (resolve, reject)=>{
+
+		    try{
+	          const mailOptions = {
+	            from: config.get('MAIL_USERNAME'),
+	            to: req.email,
+	            subject: 'Reset Password Link.',
+	            html: '<b>HI</b><br> <p>Greetings for the day.</p><br> <p>Please click Reset Password to reset your password.</p>  <p><a href='+config.get('app_route')+'users/resetPassword/'+ req.id+' <button>Reset Password</button></a></p> <br>Regards.<br> <p>Team '+config.get('site_name')+'.</p>'
+	          };
+	          const sendMailfunc = await this.Mail.sendMail(mailOptions);
+	          resolve(sendMailfunc);
+
+		    }catch(e){
+		        console.log(e);
+		        reject(e);
+		    }
+    	})
+  	}	
 }
 
 
