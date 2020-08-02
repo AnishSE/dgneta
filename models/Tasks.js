@@ -1,5 +1,5 @@
 module.exports      = function(sequelize, DataTypes) {
-  var Appointments         = sequelize.define('Appointments', {
+  var Tasks         = sequelize.define('Tasks', {
     id              : {
       type          : DataTypes.INTEGER(11),
       allowNull     : false,
@@ -11,39 +11,26 @@ module.exports      = function(sequelize, DataTypes) {
       // }      
      
     },
-    date            : {
-      type          : DataTypes.DATEONLY,
-      allowNull     : false
-    },
-    time            : {
-      type          : DataTypes.TIME,
-      allowNull     : false
-    },
-    subject         : {
-      type          : DataTypes.STRING(255),
-      allowNull     : false
-    },
-    description     : {
-      type          : DataTypes.STRING(255),
-      allowNull     : false
-    },
-    user_id         : {
-      type          : DataTypes.INTEGER(11),
-      allowNull     : false,
-    },
+
     sub_admin_id    : {
       type          : DataTypes.INTEGER(11),
-      allowNull     : false,
-    }, 
-    is_rescheduled  : {
-      type          : DataTypes.INTEGER(2),
-      allowNull     : false,
-      defaultValue  : 0
+      allowNull     : false
     },
-    status         : {
-      type          : DataTypes.INTEGER(11),
-      allowNull     : false,
-      defaultValue  : 1
+    title            : {
+      type          : DataTypes.STRING(255),
+      allowNull     : false
+    },
+    description        : {
+      type          : DataTypes.STRING(255),
+      allowNull     : true
+    },      
+    type        : {
+      type          : DataTypes.STRING(255),
+      allowNull     : true
+    },  
+    category        : {
+      type          : DataTypes.STRING(255),
+      allowNull     : true
     },                                             
     createdAt: {
       type          : DataTypes.DATE,
@@ -57,7 +44,7 @@ module.exports      = function(sequelize, DataTypes) {
     }
   },  
    {
-    tableName       : 'appointments',
+    tableName       : 'tasks',
     paranoid        : true,
     deletedAt       : 'deletedAt',
     charset         : 'utf8',
@@ -66,8 +53,14 @@ module.exports      = function(sequelize, DataTypes) {
     timestamps      : false,
 
     classMethods: {
-      associate: function(models) {}
+      associate: function(models) {
+        Tasks.hasMany(models.Tasksmedia, {
+            foreignKey : 'task_id',
+            
+            as:'Media'
+        });         
+      }
     }    
   });
-  return Appointments;
+  return Tasks;
 };

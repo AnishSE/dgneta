@@ -15,6 +15,9 @@ class SubadminManager {
     	this.Comments = wagner.get("Comments");
     	this.Mail = wagner.get('MailHelper');
     	this.Appointments = wagner.get('Appointments');
+    	this.Complaints_reply = wagner.get('Complaints_reply');
+    	this.Tasks = wagner.get('Tasks');
+    	this.Tasksmedia = wagner.get('Tasksmedia');
     }
 
 	findOne(req){
@@ -159,7 +162,8 @@ class SubadminManager {
 	        	reject(error);
 	        }
 	    })
-	}	
+	}
+
 	forgetPassword(req){
     	return new Promise(async (resolve, reject)=>{
 
@@ -230,29 +234,29 @@ class SubadminManager {
 	appointmentList(req,conds){
 	    return new Promise(async (resolve, reject)=>{
 	      	try{
-	      		let conds = {
-	      			$or: [
-				        {
-				            status: 
-				            {
-				                $eq: 1
-				            }
-				        }, 
-				        {
-				            status: 
-				            {
-				                $eq: 2
-				            }
-				        }, 
-				        {
-				            status: 
-				            {
-				                $gt: 3
-				            }
-				        }
-				    ]
-	      		}
-		        let appointments  = await this.Appointments.findAll( {where : conds, order: [['id', 'DESC']] });
+	      	// 	let conds = {
+	      	// 		$or: [
+				    //     {
+				    //         status: 
+				    //         {
+				    //             $eq: 1
+				    //         }
+				    //     }, 
+				    //     {
+				    //         status: 
+				    //         {
+				    //             $eq: 2
+				    //         }
+				    //     }, 
+				    //     {
+				    //         status: 
+				    //         {
+				    //             $eq: 3
+				    //         }
+				    //     }
+				    // ]
+	      	// 	}
+		        let appointments  = await this.Appointments.findAll( { order: [['id', 'DESC']] });
 		    	let data = [];
 		    	let count = 0;
 		    	if(appointments.length>0){
@@ -274,7 +278,133 @@ class SubadminManager {
 	        	reject(error);
 	        }
 	    })
+	}
+
+	appointmentUpdate(req,conds){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let appointments  = await this.Appointments.update(req, {where : conds});
+		        resolve(appointments)
+	      	} catch(error){
+	      		console.log(error);
+	        	reject(error);
+	        }
+	    })
 	}	
-}
+
+	acceptRejectAppointment(req,conds){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let appointments  = await this.Appointments.update(req, {where : conds});
+		        resolve(appointments)
+	      	} catch(error){
+	      		console.log(error);
+	        	reject(error);
+	        }
+	    })
+  }      
+
+  commentList(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let comments  = await this.Comments.findAll({where: req});
+		        resolve(comments)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}	
+
+	complaintsReply(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let Complaints_reply  = await this.Complaints_reply.create(req);
+		        resolve(Complaints_reply)
+	      	} catch(error){
+	      		console.log(error);
+	        	reject(error);
+	        }
+	    })
+	}
+
+	saveToGallery(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let saveToGallery  = await this.Gallerymedia.create(req);
+		        resolve(saveToGallery)
+	      	} catch(error){
+	      		console.log(error);
+	        	reject(error);
+	        }
+	    })
+	}			
+
+	createMedia(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let user  = await this.Gallery.create(req);
+		        resolve(user)
+	      	} catch(error){
+	      		console.log(error);
+	        	reject(error);
+	        }
+	    })
+	}	
+
+	createTaskMedia(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let saveToGallery  = await this.Tasksmedia.create(req);
+		        resolve(saveToGallery)
+	      	} catch(error){
+	      		console.log(error);
+	        	reject(error);
+	        }
+	    })
+	}			
+
+	createTask(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let user  = await this.Tasks.create(req);
+		        resolve(user)
+	      	} catch(error){
+	      		console.log(error);
+	        	reject(error);
+	        }
+	    })
+	}	
+
+	taskList(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let media  = await this.Tasks.findAll({where: req, include: [{
+						model : this.Tasksmedia,
+						as : 'Media'
+					}],	
+				});
+		        resolve(media)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}	
+
+	mediaList(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let media  = await this.Gallery.findAll({where: req, include: [{
+						model : this.Gallerymedia,
+						as : 'Media'
+					}],	
+				});
+		        resolve(media)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}
+  	
+}	
 
 module.exports  = SubadminManager;	

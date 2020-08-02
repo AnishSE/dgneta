@@ -1,0 +1,125 @@
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+	<!-- Main Content -->
+	<div id="content">
+
+		<!-- Header -->
+	  	<%- include('partials/header.ejs') -%>
+	  	<!-- End of Header -->
+
+	  	<!-- Begin Page Content -->
+  		<div class="container-fluid">
+			<div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Appointments List</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="appointment_datatable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>S.No</th> 
+                      <th>Appointment Name</th>
+                      <th>Description</th>                      
+                      <th>Date</th>
+                      <th>Time</th>
+                      <th>Status</th>
+                      <th>Action</th>                      
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>S.No</th> 
+                      <th>Appointment Name</th>
+                      <th>Description</th>                      
+                      <th>Date</th>
+                      <th>Time</th>
+                      <th>Status</th>
+                      <th>Action</th>                      
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                   <%for(var i=0; i<data.length; i++) {%> 
+                      <tr>
+                        <td style="width:10%"><%=i+1%></td>
+                        <td style="width:20%"><a style="color:blue;" href="javascript:void(0)"><%=data[i].subject %></a></td>
+                        <td style="width:20%"><%=data[i].description %></td>                        
+                        <td style="width:10%"><%= moment(data[i].date).format('YYYY-MM-DD') %></td>
+                        <td style="width:10%"><%=data[i].time %></td>   
+                        <td style="width:20%;">  
+                          <% if(data[i].status == 0) { %>
+                            <span><%= 'Rejected' %><span>
+                          <% }else if(data[i].status == 2) { %>
+                            <span><%= 'Accepted' %></span>                            
+                          <% }else { %>
+                            <a style="background-color:#e18932;color:white;padding:5px;" href="/admin/acceptRejectAppointment/<%= data[i].id %>/2" >Accept</a>                        
+                            <a style="background-color:#e18932;color:white;padding:5px;" href="/admin/acceptRejectAppointment/<%= data[i].id %>/0" >Reject</a>                  
+                          <% } %>                                                
+                        </td>                     
+                        <td style="width:10%;padding:10px; ">	
+                          <a class="reschedule_btn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-id="<%= data[i].id %>" data-appDate="<%= moment(data[i].date).format('YYYY-MM-DD') %>" data-appTime="<%=data[i].time %>" data-toggle="modal" data-target="#rescheduleAppointmentModal">Reschedule</a>
+                        </td>
+                      </tr>
+                    <% } %>    
+                  </tbody>                  
+                </table>
+              </div>
+            </div>
+          </div>
+		</div>
+	</div>
+	<!-- End of Main Content -->
+<!-- Reschedule Appointment Modal-->
+<div class="modal fade" id="rescheduleAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="rescheduleAppointmentModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="rescheduleAppointmentModalLabel">Reschedule Appointment</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="profile-notification-msg p-2">
+              <p class="successmsg"><%= messages.successmsg %></p>
+              <p class="errormsg"><%= messages.errormsg %></p>
+            </div>
+            <form name="rescheduleAppointmentForm" method="POST" action="/admin/appointUpdate">
+              <div class="form-group">
+                <label>Appointment Date</label>
+                <div class='input-group date' id='datetimepicker1' style="background: #fff; cursor: pointer;  border: 1px solid #ccc; width: 100%">
+                    <input type='text' name="datepicker" class="form-control" style="border:0px;width: 75%;"/>
+                    <span class="input-group-addon">
+                        <!--<span class="glyphicon glyphicon-calendar"></span>-->
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                </div>
+                <!--<div class="col-xl-4 col-md-6 mb-4">        
+                  <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                      <i class="fa fa-calendar"></i>&nbsp;
+                      <input type="text" name="datepicker" class="datepicker" style="border:0px;width: 75%;"/>                      
+                  </div>                  
+                </div> -->
+              </div>
+              <div class="form-group">
+                <label>Appointment Time</label>
+                <div class='input-group time' id='datetimepicker2' style="background: #fff; cursor: pointer; border: 1px solid #ccc; width: 100%">
+                    <input type='text' name="timepicker" class="form-control" style="border:0px;width: 75%;"/>
+                    <span class="input-group-addon">
+                        <span class="fa fa-clock"></span>
+                        <!--<span class="glyphicon glyphicon-time"></span>-->
+                    </span> 
+                </div>
+              </div>
+              <input type="hidden" name="id" class="id"/>
+              <input type="hidden" name="status" class="status" value="1"/>
+              <div class="form-group text-center">  
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" type="submit">Submit</button>
+              </div>
+            </form>            
+          </div>         
+        </div>
+      </div>
+</div>
+<!-- // Reschedule Appointment Modal-->    

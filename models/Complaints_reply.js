@@ -1,5 +1,5 @@
 module.exports      = function(sequelize, DataTypes) {
-  var Appointments         = sequelize.define('Appointments', {
+  var Complaints_reply         = sequelize.define('Complaints_reply', {
     id              : {
       type          : DataTypes.INTEGER(11),
       allowNull     : false,
@@ -11,40 +11,15 @@ module.exports      = function(sequelize, DataTypes) {
       // }      
      
     },
-    date            : {
-      type          : DataTypes.DATEONLY,
+    complaint_id       : {
+      type          : DataTypes.INTEGER(11),
       allowNull     : false
     },
-    time            : {
-      type          : DataTypes.TIME,
-      allowNull     : false
-    },
-    subject         : {
+    message        : {
       type          : DataTypes.STRING(255),
       allowNull     : false
-    },
-    description     : {
-      type          : DataTypes.STRING(255),
-      allowNull     : false
-    },
-    user_id         : {
-      type          : DataTypes.INTEGER(11),
-      allowNull     : false,
-    },
-    sub_admin_id    : {
-      type          : DataTypes.INTEGER(11),
-      allowNull     : false,
-    }, 
-    is_rescheduled  : {
-      type          : DataTypes.INTEGER(2),
-      allowNull     : false,
-      defaultValue  : 0
-    },
-    status         : {
-      type          : DataTypes.INTEGER(11),
-      allowNull     : false,
-      defaultValue  : 1
-    },                                             
+    },      
+                                            
     createdAt: {
       type          : DataTypes.DATE,
       allowNull     : true,
@@ -57,7 +32,7 @@ module.exports      = function(sequelize, DataTypes) {
     }
   },  
    {
-    tableName       : 'appointments',
+    tableName       : 'complaints_reply',
     paranoid        : true,
     deletedAt       : 'deletedAt',
     charset         : 'utf8',
@@ -69,5 +44,5 @@ module.exports      = function(sequelize, DataTypes) {
       associate: function(models) {}
     }    
   });
-  return Appointments;
+  return Complaints_reply;
 };

@@ -1,5 +1,5 @@
 module.exports      = function(sequelize, DataTypes) {
-  var Gallery         = sequelize.define('Gallery', {
+  var Tasksmedia         = sequelize.define('Tasksmedia', {
     id              : {
       type          : DataTypes.INTEGER(11),
       allowNull     : false,
@@ -11,16 +11,11 @@ module.exports      = function(sequelize, DataTypes) {
       // }      
      
     },
-    title            : {
-      type          : DataTypes.STRING(255),
-      allowNull     : false
-    },
-    sub_admin_id    : {
+    task_id       : {
       type          : DataTypes.INTEGER(11),
-      allowNull     : false
+      allowNull     : true
     },
-
-    description        : {
+      media_url        : {
       type          : DataTypes.STRING(255),
       allowNull     : true
     },      
@@ -38,7 +33,7 @@ module.exports      = function(sequelize, DataTypes) {
     }
   },  
    {
-    tableName       : 'gallery',
+    tableName       : 'tasks_media',
     paranoid        : true,
     deletedAt       : 'deletedAt',
     charset         : 'utf8',
@@ -48,13 +43,11 @@ module.exports      = function(sequelize, DataTypes) {
 
     classMethods: {
       associate: function(models) {
-        Gallery.hasMany(models.Gallerymedia, {
-            foreignKey : 'gallery_id',
-            
-            as:'Media'
-        });         
+        Tasksmedia.hasOne(models.Tasks, {
+            foreignKey : 'id'
+        });                 
       }
     }    
   });
-  return Gallery;
+  return Tasksmedia;
 };

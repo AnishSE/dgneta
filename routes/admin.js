@@ -5,6 +5,7 @@ const session                     = require('express-session');
 const md5                         = require('md5');
 const session_auth                = require('../middleware/session_auth');
 const multer                      = require('multer');
+const moment                      = require('moment');
 const storage                     = multer.diskStorage({
                                             limits: { fileSize: 10000 },
                                             filename: (req, file, cb)=>{
@@ -298,7 +299,8 @@ module.exports = (app, wagner) => {
             const appointmentList = await wagner.get('SubadminManager').appointmentList(req.body, conds);
             if(appointmentList){
                 //console.log(appointmentList);
-                res.status(200).json({ success: '1', message: "success", data: appointmentList });
+                res.render('admin/appointments',{data: appointmentList, moment: moment});  
+                // res.status(200).json({ success: '1', message: "success", data: appointmentList });
             }else{
                 res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
             }
@@ -307,10 +309,178 @@ module.exports = (app, wagner) => {
             res.status(500).json({ success: '0', message: "failure", data: e });
         }    
     }); 
+
+    router.get('/acceptRejectAppointment/:appointmentId/:status', session_auth.admin, async (req, res, next)=> {
+        try{ 
+            let params = {status : req.params.status };
+            let conds = {id: req.params.appointmentId }; 
+            const appointmentUpdate = await wagner.get('SubadminManager').acceptRejectAppointment(params, conds);
+            if(appointmentUpdate){
+                //console.log(appointmentList);
+                res.redirect('/admin/appointmentList');  
+                // res.status(200).json({ success: '1', message: "success", data: appointmentUpdate });
+            }else{
+                res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
+            }
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });
+    
+    router.post('/appointUpdate', session_auth.admin, async (req, res, next)=> {
+        try{             
+            // let time = moment(req.body.timepicker).format("HH:mm:ss");
+            // console.log(time);
+            let conds = {id : req.body.id};
+            let params = {is_rescheduled : 1, date:req.body.datepicker, time: req.body.timepicker, status: req.body.status}; 
+            const appointmentUpdate = await wagner.get('SubadminManager').appointmentUpdate(params, conds);
+            if(appointmentUpdate){
+                res.redirect('/admin/appointmentList');  
+                //console.log(appointmentList);
+                //res.status(200).json({ success: '1', message: "success", data: appointmentUpdate });
+            }else{
+                res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
+            }
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });
+    
+    router.get('/commentList/:id', session_auth.admin, async (req, res, next)=> {
+        try{ 
+            let conds = {post_id : req.params.id} /*Media id in params*/
+            const comments = await wagner.get('SubadminManager').commentList(conds);
+            if(comments){
+                //console.log(appointmentList);
+                res.status(200).json({ success: '1', message: "success", data: comments });
+            }else{
+                res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
+            }
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });
+    
+    router.post('/complaintsReply', session_auth.admin, async (req, res, next)=> {
+        try{ 
+            const complaintsReply = await wagner.get('SubadminManager').complaintsReply(req.body);
+            if(complaintsReply){
+                res.status(200).json({ success: '1', message: "success", data: '' });
+            }else{
+                res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
+            }
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    }); 
+    
+    router.get('/getMedia', session_auth.admin, async (req, res, next)=> {
+        try{ 
+            let conds = {sub_admin_id : req.session.currentUser.id} ;            
+            const mediaList = await wagner.get('SubadminManager').mediaList(conds);
+            if(mediaList){
+                console.log(mediaList);
+                res.render('admin/gallery',{data: mediaList});  
+                // res.status(200).json({ success: '1', message: "success", data: mediaList });
+            }else{
+                res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
+            }
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    }); 
+
+    router.post('/addMedia', upload.single('file-input'), async (req, res, next)=> {
+        try{ 
+            let params; 
+            const media_url = await wagner.get('UserManager').saveMediaS3(req);
+            if(req.body.gallery_id){
+                params = {
+                    gallery_id : req.body.gallery_id,
+                    media_url : media_url
+                }
+                const saveToGallery = await wagner.get('SubadminManager').saveToGallery(params);
+                res.status(200).json({ success: '1', message: "success", data: '' });
+            }else{
+                params = {
+                    title : req.body.title,
+                    sub_admin_id : 2, /*Set from sessions*/
+                    description : req.body.description
+                }
+                const createMedia = await wagner.get('SubadminManager').createMedia(params);   
+                let paramsMedia = {
+                    gallery_id : createMedia.dataValues.id,
+                    media_url : media_url
+                };       
+                const saveToGallery = await wagner.get('SubadminManager').saveToGallery(paramsMedia);
+                res.status(200).json({ success: '1', message: "success", data: '' });      
+            }    
+            
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });
+
     router.get('/logout', (req, res, next)=> {
         req.session.destroy();
         res.redirect('/admin/login');
     })
+
+    router.get('/getTasks/:id', /*session_auth.admin,*/ async (req, res, next)=> {
+        try{ 
+            let conds = {sub_admin_id : req.params.id} /*Media id in params*/
+            const taskList = await wagner.get('SubadminManager').taskList(conds);
+            if(taskList){
+                //console.log(appointmentList);
+                res.status(200).json({ success: '1', message: "success", data: taskList });
+            }else{
+                res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
+            }
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    }); 
+
+    router.post('/addTasks', upload.single('file-input'), async (req, res, next)=> {
+        try{ 
+            let params; 
+            const media_url = await wagner.get('UserManager').saveMediaS3(req);
+            if(req.body.task_id){
+                params = {
+                    task_id : req.body.task_id,
+                    media_url : media_url
+                }
+                const createTaskMedia = await wagner.get('SubadminManager').createTaskMedia(params);
+                res.status(200).json({ success: '1', message: "success", data: '' });
+            }else{
+                params = {
+                    title : req.body.title,
+                    sub_admin_id : 2, /*Set from sessions*/
+                    description : req.body.description,
+                    type : req.body.type,
+                    category : req.body.category
+                }
+                const createTask = await wagner.get('SubadminManager').createTask(params);   
+                let paramsMedia = {
+                    task_id : createTask.dataValues.id,
+                    media_url : media_url
+                };       
+                const createTaskMedia = await wagner.get('SubadminManager').createTaskMedia(paramsMedia);
+                res.status(200).json({ success: '1', message: "success", data: '' });      
+            }    
+            
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });
 
 	return router;
 }
