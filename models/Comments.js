@@ -23,7 +23,12 @@ module.exports      = function(sequelize, DataTypes) {
     user_id    : {
       type          : DataTypes.INTEGER(11),
       allowNull     : false,
-    },                                            
+    },   
+    status    : {
+      type          : DataTypes.INTEGER(11),
+      allowNull     : false,
+      defaultValue  : 1  
+    },                                                
     createdAt: {
       type          : DataTypes.DATE,
       allowNull     : true,
@@ -45,7 +50,12 @@ module.exports      = function(sequelize, DataTypes) {
     timestamps      : false,
 
     classMethods: {
-      associate: function(models) {}
+      associate: function(models) {
+        Comments.belongsTo(models.Users, {
+            foreignKey : 'user_id',
+            as : 'Users'
+        });
+      }
     }    
   });
   return Comments;

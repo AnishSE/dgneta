@@ -18,6 +18,7 @@ class SubadminManager {
     	this.Complaints_reply = wagner.get('Complaints_reply');
     	this.Tasks = wagner.get('Tasks');
     	this.Tasksmedia = wagner.get('Tasksmedia');
+    	this.Complaints = wagner.get('Complaints');
     }
 
 	findOne(req){
@@ -304,10 +305,13 @@ class SubadminManager {
 	    })
   }      
 
-  commentList(req){
+	complaintsList(req){
 	    return new Promise(async (resolve, reject)=>{
 	      	try{
-		        let comments  = await this.Comments.findAll({where: req});
+		        let comments  = await this.Complaints.findAll({where: req, include: [{
+					model : this.Users,
+					as : 'Users'
+				}],	});
 		        resolve(comments)
 	      	} catch(error){
 	        	reject(error);
@@ -404,7 +408,54 @@ class SubadminManager {
 	        }
 	    })
 	}
-  	
-}	
+
+	commentsGallery(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let commentsGallery  = await this.Comments.findAll({where: req, include: [{
+						model : this.Users,
+						as : 'Users'
+					}],	
+				});
+		        resolve(commentsGallery)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}
+
+	delTasks(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let delTasks  = await this.Tasks.destroy({where: {id: req}});
+		        let delTasksMedia = await this.Tasksmedia.destroy({ where: {task_id: req} });
+		        resolve(delTasks)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}						
+	editTasks(req, conds){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let editTasks  = await this.Tasks.update(req, {where: conds});
+		        resolve(editTasks)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}	
+
+	viewRepliesComplaints(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let viewRepliesComplaints  = await this.Complaints_reply.findAll({where: req});
+		        resolve(viewRepliesComplaints)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}							
+}
 
 module.exports  = SubadminManager;	

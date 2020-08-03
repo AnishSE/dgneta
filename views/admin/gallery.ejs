@@ -1,3 +1,8 @@
+<style>
+input[type=file]{
+  padding: 3px;
+}
+</style>
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
 	
@@ -28,6 +33,7 @@
                       <th>Title</th>
                       <th>Description</th>
                       <th>Gallery Media</th>
+                      <th>Comment</th>
                       <th>Action</th>                      
                     </tr>
                   </thead>
@@ -37,6 +43,7 @@
                       <th>Title</th>
                       <th>Description</th>
                       <th>Gallery Media</th>
+                      <th>Comments</th>
                       <th>Action</th>                      
                     </tr>
                   </tfoot>
@@ -46,9 +53,24 @@
                         <td><%=i+1%></td>
                         <td><%=data[i].title %></td>
                         <td><%=data[i].description %></td>
-                        <td><img src="<%=data[i].Media.media_url %>"/></td>
                         <td>
-	                        <a style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-gallery_id="<%=data[i].id %>">Add More</a>
+                        <% if(data[i].Media){ %>
+                          <% //if(data[i].Media[0].media_url !='' && data[i].Media[0].media_url !=null) {%>
+                            <div class="row m-0">
+                              <div class="small-12 medium-2 large-2 columns">
+                                <div class="circle">                          
+                                  <img class="profile-pic" src="<% // data[i].Media[0].media_url %>">
+                                </div>
+                              </div>
+                            </div>
+                          <% // } 
+                        }%>
+                        </td>  
+                        <td style="width:20%">
+                          <a class="viewGalleryCommentBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-gallery_id="<%=data[i].id %>" data-toggle="modal" data-target="#viewCommentModal">View Comment</a>
+                        </td>
+                        <td>
+	                        <a class="addMoreBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-gallery_id="<%=data[i].id %>" data-toggle="modal" data-target="#addMoreMediaModal">Add More</a>
                         </td>
                       </tr>
                     <% } %>    
@@ -75,18 +97,18 @@
                 <p class="successmsg"><%= messages.successmsg %></p>
                 <p class="errormsg"><%= messages.errormsg %></p>
               </div>
-              <form class="createGalleryForm" name="createGalleryForm" method="POST" action="/admin/addMedia">
+              <form class="addMediaForm" name="addMediaForm" method="POST" enctype="multipart/form-data" action="/admin/addMedia">
                 <div class="form-group">
                   <label>Title</label>
-                  <input type="text"  class="form-control"  name="title" placeholder="Enter Title"/>
+                  <input type="text" class="form-control" name="title" placeholder="Enter Title"/>
                 </div>
                 <div class="form-group">
                   <label>Description</label>
-                  <input type="text"  class="form-control"  name="last_name" placeholder="Enter Description"/>
+                  <input type="text" class="form-control" name="description" placeholder="Enter Description"/>
                 </div>
                 <div class="form-group">
                   <label>Media</label>
-                  <input type="file"  class="form-control"  name="file"/>
+                  <input type="file" class="form-control" name="file-input"/>
                 </div>              
                 <div class="form-group text-center">  
                   <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
@@ -98,6 +120,58 @@
           </div>
         </div>
   </div>
-  <!-- // Add Media Modal -->    
-
+  <!-- // Add Media Modal -->
+  <!-- Add More Media Modal -->
+  <div class="modal fade" id="addMoreMediaModal" tabindex="-1" role="dialog" aria-labelledby="addMoreMediaModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addMoreMediaModalLabel">Add More Media</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="profile-notification-msg p-2">
+                <p class="successmsg"><%= messages.successmsg %></p>
+                <p class="errormsg"><%= messages.errormsg %></p>
+              </div>
+              <form class="addMoreMediaForm" name="addMoreMediaForm" method="POST" enctype="multipart/form-data" action="/admin/addMedia">
+                <div class="form-group">
+                  <label>Media</label>
+                  <input type="file"  class="form-control"  name="file-input"/>
+                </div>  
+                <input type="hidden" name="gallery_id" id="gallery_id" />            
+                <div class="form-group text-center">  
+                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+  </div>
+  <!-- // Add More Media Modal -->    
+  <!-- View Comment Modal -->
+  <div class="modal fade" id="viewCommentModal" tabindex="-1" role="dialog" aria-labelledby="viewCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="viewCommentModalLabel">View Comment</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">              
+              <div class="form-group">
+                  <label>Comment</label>
+                  <p class="comments_data"></p>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+  </div> 
+  <!-- //View Comment Modal -->
 	<!-- End of Main Content -->

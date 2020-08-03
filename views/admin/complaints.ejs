@@ -1,0 +1,120 @@
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+	<!-- Main Content -->
+	<div id="content">
+
+		<!-- Header -->
+	  	<%- include('partials/header.ejs') -%>
+	  	<!-- End of Header -->
+
+	  	<!-- Begin Page Content -->
+  		<div class="container-fluid">
+			<div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Complaints List</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="complaints_datatable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>S.No</th> 
+                      <th>Title</th>
+                      <th>Message</th> 
+                      <th>Image</th>                      
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>S.No</th> 
+                      <th>Title</th>
+                      <th>Message</th> 
+                      <th>Image</th>                      
+                      <th>Action</th>                      
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                   <%for(var i=0; i<data.length; i++) {%> 
+                      <tr>
+                        <td style="width:10%"><%=i+1%></td>
+                        <td style="width:10%"><%=data[i].title %></td>
+                        <td style="width:10%"><%=data[i].message %></td>
+                        <td style="width:30%">
+                            <% if(data[i].media_url !='' && data[i].media_url !=null) {%>
+                              <div class="row m-0">
+                                <div class="small-12 medium-2 large-2 columns">
+                                  <div class="circle">                          
+                                    <img class="profile-pic" src="<%  data[i].media_url %>">
+                                  </div>
+                                </div>
+                              </div>
+                            <%  } %>
+                        </td>                        
+                        <td style="width:30%">	 
+                          <a class="viewReply" style="background-color:#e18932;color:white;padding:5px;" href="#" data-complaint_id="<%=data[i].id %>" data-toggle="modal" data-target="#viewReplyModal">View Reply</a>                       
+	                        <a class="replyComplaint" style="background-color:#e18932;color:white;padding:5px;" href="#" data-complaint_id="<%=data[i].id %>" data-toggle="modal" data-target="#replyComplaintModal">Reply Complaint</a>
+                        </td>
+                      </tr>
+                    <% } %>    
+                  </tbody>                  
+                </table>
+              </div>
+            </div>
+          </div>
+		</div>
+	</div>
+  <!-- View Comment Modal -->
+  <div class="modal fade" id="viewReplyModal" tabindex="-1" role="dialog" aria-labelledby="viewReplyModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="viewReplyModalLabel">Complaint Reply</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">              
+              <div class="form-group">                  
+                  <p class="complaint_data"></p>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+  </div> 
+  <!-- //View Comment Modal -->
+  <!-- Reply Complaint Modal -->
+  <div class="modal fade" id="replyComplaintModal" tabindex="-1" role="dialog" aria-labelledby="replyComplaintModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="replyComplaintModalLabel">Reply Complaint</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="profile-notification-msg p-2">
+                <p class="successmsg"><%= messages.successmsg %></p>
+                <p class="errormsg"><%= messages.errormsg %></p>
+              </div>
+              <form class="complaintsReplyForm" name="complaintsReplyForm" method="POST" action="/admin/complaintsReply">
+                <div class="form-group">
+                  <label>Reply</label>
+                  <span class="text-red">*</span>
+                  <input type="text" class="form-control" name="message" placeholder="Enter Reply"/>
+                </div>
+                <input type="hidden" name="complaint_id" id="complaint_id"/>                            
+                <div class="form-group text-center">  
+                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+  </div>
+  <!-- // Reply Complaint Modal -->
+	<!-- End of Main Content -->

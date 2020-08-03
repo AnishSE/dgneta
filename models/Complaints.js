@@ -58,7 +58,12 @@ module.exports      = function(sequelize, DataTypes) {
     timestamps      : false,
 
     classMethods: {
-      associate: function(models) {}
+      associate: function(models) {
+        Complaints.belongsTo(models.Users, {
+            foreignKey : 'user_id',
+            as:'Users'
+        });         
+      }
     }    
   });
   return Complaints;

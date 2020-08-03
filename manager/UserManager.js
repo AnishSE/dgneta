@@ -262,7 +262,8 @@ class UserManager {
 	      			user_id : req.body.userId,
 	      			media_url : saveMediaS3,
 	      			message : req.body.message,
-	      			title : req.body.title
+	      			title : req.body.title,
+	      			sub_admin_id : req.body.sub_admin_id
 	      		};
 	      		console.log(complaintObj);
 		        let user         = await this.Complaints.create(complaintObj);

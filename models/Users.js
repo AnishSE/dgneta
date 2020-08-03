@@ -20,7 +20,7 @@ module.exports      = function(sequelize, DataTypes) {
       allowNull     : false
     },      
     birth_date      : {
-      type          : DataTypes.STRING(255),
+      type          : DataTypes.DATEONLY,
       allowNull     : false
     },      
     taluka	        : {
@@ -83,7 +83,15 @@ module.exports      = function(sequelize, DataTypes) {
         Users.belongsTo(models.Subadmin, {
             foreignKey : 'sub_admin_id',
             as:'subadmin'
-        });        
+        });    
+        
+        Users.belongsTo(models.Comments, {
+            foreignKey : 'id'
+        });   
+        
+        Users.belongsTo(models.Complaints, {
+            foreignKey : 'id'
+        }); 
       }
     }    
   });

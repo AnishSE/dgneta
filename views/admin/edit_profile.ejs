@@ -225,7 +225,7 @@
                             </div>
                             <div class="form_group col-sm-6">
                                 <label for="dob">DOB</label>
-                                <input class="form_group" name="dob" value="<%= data.dob %>">                                                  
+                                <input class="form_group" name="dob" value="<%= moment(data.dob).format("YYYY-MM-DD"); %>">
                             </div>
                           </div>
                           <div class="row">

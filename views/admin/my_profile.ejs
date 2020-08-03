@@ -109,7 +109,7 @@
                           </div>
                           <div class="row">
                               <div class="col-md-3 head">DOB</div>
-                              <div class="col-md-9 row_value"><%= data.dob %></div>
+                              <div class="col-md-9 row_value"><%= moment(data.dob).format("YYYY-MM-DD"); %></div>
                           </div>
                           <div class="row">
                               <div class="col-md-3 head">Education</div>

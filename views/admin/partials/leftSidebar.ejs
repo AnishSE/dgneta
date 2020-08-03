@@ -5,7 +5,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Admin</div>
+        <div class="sidebar-brand-text mx-3">DGNETA</div>
       </a>
 
       <!-- Divider -->
@@ -24,7 +24,7 @@
       <!-- Nav Item - User -->
       <li class="nav-item">
         <a class="nav-link" href="/admin/users">
-          <i class="fas fa-fw fa-table"></i>
+          <i class="fas fa-fw fa-user-circle"></i>
           <span>User</span></a>
       </li>
 
@@ -43,15 +43,17 @@
 
       <% } %>
 
+      <% if(currentUser.roles == 2) { %>
+
       <!-- Divider -->
       <hr class="sidebar-divider">
 
-      <!-- Nav Item - Followers Birthday -->
+      <!-- Nav Item - Complaints -->
       <li class="nav-item">
-        <a class="nav-link" href="/admin/birthday">
+        <a class="nav-link" href="/admin/complaintsList">
           <i class="fas fa-fw fa-user"></i>
-          <span>Followers Birthday</span></a>
-      </li>
+          <span>Complaints</span></a>
+      </li>      
 
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -59,18 +61,8 @@
       <!-- Nav Item - Appointments -->
       <li class="nav-item">
         <a class="nav-link" href="/admin/appointmentList">
-          <i class="fas fa-fw fa-user"></i>
+          <i class="fas fa-fw fa-book"></i>
           <span>Appointments</span></a>
-      </li>
-      
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Nav Item - Complaints -->
-      <li class="nav-item">
-        <a class="nav-link" href="javascript:void(0)">
-          <i class="fas fa-fw fa-user"></i>
-          <span>Complaints</span></a>
       </li>
 
       <!-- Divider -->
@@ -79,9 +71,40 @@
       <!-- Nav Item - Gallery -->
       <li class="nav-item">
         <a class="nav-link" href="/admin/getMedia">
-          <i class="fas fa-fw fa-user"></i>
+          <i class="fas fa-fw fa-image"></i>
           <span>Gallery</span></a>
       </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Nav Item - Work -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseWork" aria-expanded="true" aria-controls="collapseWork">
+          <i class="fas fa-fw fa-image"></i>
+          <span>Work</span>
+        </a>
+        <div id="collapseWork" class="collapse" aria-labelledby="headingReport" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">            
+            <a class="collapse-item" href="/admin/developmentWork">Development Work</a>
+            <a class="collapse-item" href="/admin/pendingWork">Pending Work</a>
+            <a class="collapse-item" href="/admin/socialWork">Social Work</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Nav Item - Followers Birthday -->
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/birthday">
+          <i class="fas fa-fw fa-birthday-cake"></i>
+          <span>Followers Birthday</span></a>
+      </li>
+
+      <% } %>
+      
       <hr class="sidebar-divider d-none">
 
       <!-- Divider -->

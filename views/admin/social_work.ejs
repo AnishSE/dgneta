@@ -1,0 +1,245 @@
+<style>
+input[type=file]{
+  padding: 3px;
+}
+</style>
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+	
+  <!-- Main Content -->
+	<div id="content">
+
+		  <!-- Header -->
+	  	<%- include('partials/header.ejs') -%>
+	  	<!-- End of Header -->
+
+	  	<!-- Begin Page Content -->
+  		<div class="container-fluid">
+			  <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <div class="col-md-6" style="float:left">
+                <h5 class="m-0 font-weight-bold text-primary">Social Work</h5>
+              </div>
+              <div class="col-md-6" style="float:right;margin-right: -365px;">
+                <button class="addWork" style="color:white;background-color:#224abe;" data-toggle="modal" data-target="#addWorkModal">Add Social Work</button>
+              </div>              
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="work_datatable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>S.No</th> 
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Gallery Media</th>
+                      <th>Comments</th>
+                      <th>Action</th>                      
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>S.No</th> 
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Gallery Media</th>
+                      <th>Comments</th>
+                      <th>Action</th>                      
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                   <%for(var i=0; i<data.length; i++) {%> 
+                      <tr>
+                        <td style="width:10%"><%=i+1%></td>
+                        <td style="width:10%"><%=data[i].title %></td>
+                        <td style="width:10%"><%=data[i].description %></td>                        
+                        <td style="width:25%">
+                        <% if(data[i].Media){ %>
+                          <% //if(data[i].Media[0].media_url !='' && data[i].Media[0].media_url !=null) {%>
+                            <div class="row m-0">
+                              <div class="small-12 medium-2 large-2 columns">
+                                <div class="circle">                          
+                                  <img class="profile-pic" src="<% // data[i].Media[0].media_url %>">
+                                </div>
+                              </div>
+                            </div>
+                          <% // } 
+                        }%>
+                        </td> 
+                        <td style="width:20%">
+                          <a class="viewWorkCommentBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-task_id="<%=data[i].id %>" data-toggle="modal" data-target="#viewCommentModal">View Comment</a>
+                        </td> 
+                        <td style="width:25%">
+                          <a class="addWorkMoreBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-task_id="<%=data[i].id %>" data-toggle="modal" data-target="#addMoreWorkModal">Add More</a>
+                          <a class="editWorkBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-task_id="<%=data[i].id %>" data-toggle="modal" data-target="#editWorkModal">Edit</a>
+                          <a class="deleteWorkBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-task_id="<%=data[i].id %>" data-toggle="modal" data-target="#deleteWorkModal">Delete</a>
+                        </td>
+                      </tr>
+                   <% } %>   
+                  </tbody>                  
+                </table>
+              </div>
+            </div>
+        </div>
+		  </div>
+      <!-- End Page Content -->
+	</div>
+  <!-- Add Work Modal -->
+  <div class="modal fade" id="addWorkModal" tabindex="-1" role="dialog" aria-labelledby="addWorkModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addWorkModalLabel">Add Work</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="profile-notification-msg p-2">
+                <p class="successmsg"><%= messages.successmsg %></p>
+                <p class="errormsg"><%= messages.errormsg %></p>
+              </div>
+              <form class="addWorkForm" name="addWorkForm" method="POST" enctype="multipart/form-data" action="/admin/addTasks">                
+                <div class="form-group">
+                  <label>Title</label>
+                  <span class="text-red">*</span>
+                  <input type="text" class="form-control" name="title" placeholder="Enter Title"/>
+                </div>
+                <div class="form-group">
+                  <label>Description</label>
+                  <input type="text" class="form-control" name="description" placeholder="Enter Description"/>
+                </div>
+                <div class="form-group">
+                  <label>Media</label>
+                  <span class="text-red">*</span>
+                  <input type="file" class="form-control" name="file-input"/>
+                </div>       
+                <input type="hidden" name="type" value="Social"/> 
+                <div class="form-group text-center">  
+                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+  </div>
+  <!-- // Add Work Modal -->
+  <!-- Add More Work Modal -->
+  <div class="modal fade" id="addMoreWorkModal" tabindex="-1" role="dialog" aria-labelledby="addMoreWorkModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addMoreWorkModalLabel">Add More Media</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="profile-notification-msg p-2">
+                <p class="successmsg"><%= messages.successmsg %></p>
+                <p class="errormsg"><%= messages.errormsg %></p>
+              </div>
+              <form class="addMoreWorkForm" name="addMoreWorkForm" method="POST" enctype="multipart/form-data" action="/admin/addTasks">
+                <div class="form-group">
+                  <label>Media</label>
+                  <input type="file"  class="form-control"  name="file-input"/>
+                </div>  
+                <input type="hidden" name="type" value="Social"/> 
+                <input type="hidden" name="task_id" id="task_id"/>     
+                <div class="form-group text-center">  
+                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+  </div>
+  <!-- // Add More Work Modal -->    
+  <!-- Edit Work Modal -->
+  <div class="modal fade" id="editWorkModal" tabindex="-1" role="dialog" aria-labelledby="editWorkModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editWorkModalLabel">Edit Work</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="profile-notification-msg p-2">
+                <p class="successmsg"><%= messages.successmsg %></p>
+                <p class="errormsg"><%= messages.errormsg %></p>
+              </div>
+              <form class="editWorkForm" name="editWorkForm" method="POST" action="/admin/editTasks">
+                <div class="form-group">
+                  <label>Title</label>
+                  <span class="text-red">*</span>
+                  <input type="text" class="form-control workTitle" name="title" placeholder="Enter Title"/>
+                </div>
+                <div class="form-group">
+                  <label>Description</label>
+                  <input type="text" class="form-control workDescription" name="description" placeholder="Enter Description"/>
+                </div>
+                <!--<div class="form-group">
+                  <label>Media</label>
+                  <span class="text-red">*</span>
+                  <input type="file" class="form-control" name="file-input"/>
+                </div>  --> 
+                <input type="hidden" name="type" value="Social"/> 
+                <input type="hidden" name="id" class="id"/>                            
+                <div class="form-group text-center">  
+                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                  <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+  </div> 
+  <!-- //Edit Work Modal -->  
+  <!-- Delete Modal-->
+  <div class="modal fade" id="deleteWorkModal" tabindex="-1" role="dialog" aria-labelledby="deleteWorkModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteWorkModalLabel">Ready to Delete?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Are you sure to delete work record?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary deleteSocialBtn" href="#">Delete</a>
+          </div>
+        </div>
+      </div>
+  </div>
+  <!-- //Delete Modal-->
+  <!-- View Comment Modal -->
+  <div class="modal fade" id="viewCommentModal" tabindex="-1" role="dialog" aria-labelledby="viewCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="viewCommentModalLabel">View Comment</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">              
+              <div class="form-group">
+                  <label>Comment</label>
+                  <p class="comments_data"></p>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+  </div> 
+  <!-- //View Comment Modal -->
+	<!-- End of Main Content -->
