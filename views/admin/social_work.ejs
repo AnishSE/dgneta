@@ -72,7 +72,7 @@ input[type=file]{
                         <td style="width:25%">
                           <a class="addWorkMoreBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-task_id="<%=data[i].id %>" data-toggle="modal" data-target="#addMoreWorkModal">Add More</a>
                           <a class="editWorkBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-task_id="<%=data[i].id %>" data-toggle="modal" data-target="#editWorkModal">Edit</a>
-                          <a class="deleteWorkBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-task_id="<%=data[i].id %>" data-toggle="modal" data-target="#deleteWorkModal">Delete</a>
+                          <a class="deleteSocialWorkBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-task_id="<%=data[i].id %>" data-toggle="modal" data-target="#deleteWorkModal">Delete</a>
                         </td>
                       </tr>
                    <% } %>   
@@ -99,7 +99,7 @@ input[type=file]{
                 <p class="successmsg"><%= messages.successmsg %></p>
                 <p class="errormsg"><%= messages.errormsg %></p>
               </div>
-              <form class="addWorkForm" name="addWorkForm" method="POST" enctype="multipart/form-data" action="/admin/addTasks">                
+              <form class="addSocialWorkForm" name="addSocialWorkForm" method="POST" enctype="multipart/form-data" action="/admin/addTasks">                
                 <div class="form-group">
                   <label>Title</label>
                   <span class="text-red">*</span>
@@ -112,7 +112,7 @@ input[type=file]{
                 <div class="form-group">
                   <label>Media</label>
                   <span class="text-red">*</span>
-                  <input type="file" class="form-control" name="file-input"/>
+                  <input type="file" class="form-control" name="fileInput"/>
                 </div>       
                 <input type="hidden" name="type" value="Social"/> 
                 <div class="form-group text-center">  
@@ -144,7 +144,7 @@ input[type=file]{
               <form class="addMoreWorkForm" name="addMoreWorkForm" method="POST" enctype="multipart/form-data" action="/admin/addTasks">
                 <div class="form-group">
                   <label>Media</label>
-                  <input type="file"  class="form-control"  name="file-input"/>
+                  <input type="file"  class="form-control"  name="fileInput"/>
                 </div>  
                 <input type="hidden" name="type" value="Social"/> 
                 <input type="hidden" name="task_id" id="task_id"/>     
@@ -174,7 +174,7 @@ input[type=file]{
                 <p class="successmsg"><%= messages.successmsg %></p>
                 <p class="errormsg"><%= messages.errormsg %></p>
               </div>
-              <form class="editWorkForm" name="editWorkForm" method="POST" action="/admin/editTasks">
+              <form class="editSocialWorkForm" name="editSocialWorkForm" method="POST" action="/admin/editTasks">
                 <div class="form-group">
                   <label>Title</label>
                   <span class="text-red">*</span>
@@ -187,7 +187,7 @@ input[type=file]{
                 <!--<div class="form-group">
                   <label>Media</label>
                   <span class="text-red">*</span>
-                  <input type="file" class="form-control" name="file-input"/>
+                  <input type="file" class="form-control" name="fileInput"/>
                 </div>  --> 
                 <input type="hidden" name="type" value="Social"/> 
                 <input type="hidden" name="id" class="id"/>                            

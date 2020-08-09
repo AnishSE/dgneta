@@ -36,8 +36,9 @@ module.exports = (app, wagner) => {
                 let lasterr = errors.array().pop();
                 lasterr.message = lasterr.msg + ": " + lasterr.param.replace("_"," ");
                 
-                req.flash('errormsg', 'Some error occured please try again.');
-                res.redirect('/admin/login');
+                // req.flash('errormsg', 'Some error occured please try again.');
+                // res.redirect('/admin/login');
+                res.status(403).json({ success: '0', message: "failure", errormsg:"Some error occured please try again."});         
             }else{
                 let params = {
                     email : req.body.email,
@@ -47,11 +48,14 @@ module.exports = (app, wagner) => {
                 if(admin){
                     req.session.currentUser = admin.dataValues;
                     // console.log(req.session);
-                    res.redirect('/admin/dashboard'); 
+                    // res.redirect('/admin/dashboard'); 
+                    res.status(200).json({ success: '1', message: "success"});
                 } else {
-                    req.flash('errormsg', 'Incorrect Username or Password.');
-                    res.redirect('/admin/login');               }
+                    // req.flash('errormsg', 'Incorrect Username or Password.');
+                    // res.redirect('/admin/login');      
+                    res.status(403).json({ success: '0', message: "failure", errormsg:"Incorrect Username or Password."});         
                 }
+            }
         }catch(e){
             console.log(e);
             res.status(500).json({ success: '0', message: "failure", data: e });
@@ -79,12 +83,14 @@ module.exports = (app, wagner) => {
             const sendMail = await wagner.get('SubadminManager').forgetPassword(payload);    
             if(sendMail){
                 console.log("Mail Sent");                
-                req.flash('successmsg', 'Mail sent on registered Email Id.');
-                res.redirect('/admin/forgotPassword');                                
+                // req.flash('successmsg', 'Mail sent on registered Email Id.');
+                // res.redirect('/admin/forgotPassword');  
+                res.status(200).json({ success: '1', message: "success", successmsg: "Mail sent on registered Email Id."});                              
             }
         }else{
-            req.flash('errormsg', 'Email id not registered.');
-            res.redirect('/admin/forgotPassword');                
+            // req.flash('errormsg', 'Email id not registered.');
+            // res.redirect('/admin/forgotPassword');   
+            res.status(500).json({ success: '0', message: "failure", errormsg: "Email id not registered."});                                           
         }      
     });
 
@@ -142,7 +148,7 @@ module.exports = (app, wagner) => {
         try{ 
         	const users = await wagner.get('UserManager').userList();
             console.log(users);
-        	res.render('admin/users',{data: users}); 
+        	res.render('admin/users',{data: users, moment:moment}); 
         }catch(e){
             console.log(e);
             res.status(500).json({ success: '0', message: "failure", data: e });
@@ -430,7 +436,7 @@ module.exports = (app, wagner) => {
         }    
     }); 
 
-    router.post('/addMedia', upload.single('file-input'), session_auth.admin, async (req, res, next)=> {
+    router.post('/addMedia', upload.single('fileInput'), session_auth.admin, async (req, res, next)=> {
         try{ 
             let params; 
             let saveToGallery = {};
@@ -460,6 +466,7 @@ module.exports = (app, wagner) => {
             } 
             if(saveToGallery){
                 res.redirect('/admin/getMedia');  
+                // res.status(200).json({ success: '1', message: "success" });                    
             }else{
                 res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
             }   
@@ -523,7 +530,7 @@ module.exports = (app, wagner) => {
         }    
     });
     
-    router.post('/addTasks', upload.single('file-input'), session_auth.admin, async (req, res, next)=> {
+    router.post('/addTasks', upload.single('fileInput'), session_auth.admin, async (req, res, next)=> {
         try{ 
             let params; 
             let createTaskMedia = {};

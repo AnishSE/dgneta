@@ -9,8 +9,8 @@
 
 	  	<!-- Begin Page Content -->
   		<div class="container-fluid">
-			<div style="width:100%">
-				<h1 style="text-align:center;margin-top:30px;">Welcome to Admin Dashboard</h1>
+			<div style="width:100%">			
+				<h1 style="text-align:center;margin-top:30px;">Welcome to <%= (currentUser.roles == 1) ? 'Admin' : 'SubAdmin'; %>  Dashboard</h1>
 			</div>
 		</div>
 	</div>

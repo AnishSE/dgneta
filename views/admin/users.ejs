@@ -39,7 +39,7 @@
                       <tr>
                         <td><%=i+1%></td>
                         <td><a style="color:blue;" href="javascript:void(0)"><%=data[i].first_name+ ' '+data[i].last_name %></a></td>
-                        <td><%=data[i].birth_date %></td>
+                        <td><%= (data[i].birth_date != "") ? moment(data[i].birth_date).format("YYYY-MM-DD") : ""; %></td>
                         <td><%=data[i].mobile_number %></td>
                         <td>
 	                        <% if(data[i].status === 1){ %>
