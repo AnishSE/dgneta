@@ -15,7 +15,10 @@ module.exports      = function(sequelize, DataTypes) {
       type          : DataTypes.INTEGER(11),
       allowNull     : false
     },
-
+    sub_admin_id  : {
+      type          : DataTypes.INTEGER(11),
+      allowNull     : false
+    },
     media_url       : {
       type          : DataTypes.STRING(255),
       allowNull     : false

@@ -222,20 +222,28 @@ class UserManager {
 			        	let totalJoined = await this.Joinevents.findAll({where : { event_id:val.id } });
 			        	if(eventJoinedStatus){
 			        		data = {
+			        			id    : val.id,
 			        			media : val.media_url,
 			        			description : val.description,
 			        			totalJoined : totalJoined.length,
-			        			joined : 1
+			        			joined : 1,
+			        			location : val.location,
+			        			date : moment(val.date).format("YYYY-MM-DD"),
+			        			time : val.time
 			        		}
 
 			        		dataArray.push(data);
 
 			        	}else{
 			        		data = {
+			        			id    : val.id,
 			        			media : val.media_url,
 			        			description : val.description,
 			        			totalJoined : totalJoined.length,
-			        			joined : 0
+			        			joined : 0,
+			        			location : val.location,
+			        			date : moment(val.date).format("YYYY-MM-DD"),
+			        			time : val.time			        			
 			        		}
 			        		dataArray.push(data);		        		
 			        	}
@@ -262,7 +270,8 @@ class UserManager {
 	      			user_id : req.body.userId,
 	      			media_url : saveMediaS3,
 	      			message : req.body.message,
-	      			title : req.body.title
+	      			title : req.body.title,
+	      			sub_admin_id : req.body.sub_admin_id		 
 	      		};
 	      		console.log(complaintObj);
 		        let user         = await this.Complaints.create(complaintObj);
@@ -286,9 +295,9 @@ class UserManager {
 	saveMediaS3(req) {
 	    return new Promise(async (resolve, reject) =>{
 	      try {
-			AWS.config.update( {accessKeyId: 'AKIA2OM7FZRGK2BK6SOE', secretAccessKey: '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'} )									 	
+			AWS.config.update( {accessKeyId: 'AKIAWSMYASKCD6VXIZLP', secretAccessKey: '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'} )									 	
 			let s3         = new AWS.S3();
-			let myBucket   = 'test-rum';	      	
+			let myBucket   = 'intromu-media';	      	
 	        const files    = req.file;
 	        let old_path   = files.path;
 	        let file_ext   = files.originalname.split('.').pop();

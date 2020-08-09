@@ -23,7 +23,19 @@ module.exports      = function(sequelize, DataTypes) {
     description       : {
       type          : DataTypes.STRING(255),
       allowNull     : false
-    },                                                
+    },
+    location       : {
+      type          : DataTypes.STRING(255),
+      allowNull     : false
+    },    
+    date            : {
+      type          : DataTypes.DATEONLY,
+      allowNull     : true
+    },
+    time            : {
+      type          : DataTypes.TIME,
+      allowNull     : false
+    },                                                    
     createdAt      : {
       type          : DataTypes.DATE,
       allowNull     : true,

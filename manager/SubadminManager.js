@@ -11,6 +11,8 @@ class SubadminManager {
     	this.Gallery = wagner.get("Gallery");
     	this.Gallerymedia = wagner.get("Gallerymedia");
     	this.Comments = wagner.get("Comments");
+    	this.Complaints = wagner.get("Complaints");
+    	this.Appointments = wagner.get("Appointments");
     }
 
 	findOne(req){
@@ -156,6 +158,28 @@ class SubadminManager {
 	        }
 	    })
 	}	
+
+	findComplaints(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let Complaints  = await this.Complaints.findAll({where : req});
+		        resolve(Complaints)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}
+
+	findAppointments(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let Complaints  = await this.Appointments.findAll({where : req});
+		        resolve(Complaints)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}
 }
 
 

@@ -52,6 +52,7 @@ module.exports = (app, wagner) => {
             	mobile_number : req.body.permanentMobileNumber,
             	add_mobile_no : req.body.AdditionalMobileNumber,
             	sub_admin_id : req.body.uniqueKey,
+                device_id : req.body.device_id
             }  
 
             const users = await wagner.get('UserManager').insert(params);
