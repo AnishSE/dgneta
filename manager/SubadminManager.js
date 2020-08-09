@@ -19,6 +19,7 @@ class SubadminManager {
     	this.Tasks = wagner.get('Tasks');
     	this.Tasksmedia = wagner.get('Tasksmedia');
     	this.Complaints = wagner.get('Complaints');
+    	this.Events = wagner.get('Events')
     }
 
 	findOne(req){
@@ -40,9 +41,10 @@ class SubadminManager {
 	      		let count = 0; 
 		        let gallery  = await this.Gallery.findAll({where :req});
 		        if(gallery.length>0){
+		        	console.log(gallery);
 			        asyncLoop(gallery, async (val, next)=>{
 			        	let images = await this.Gallerymedia.findAll({where : { gallery_id:val.id } });
-			        	let commentsCount = await this.Comments.count({where : { post_id:val.id } });
+			        	let commentsCount = await this.Comments.count({where : { post_id:val.id, status : 1 } });
 			        		data = {
 			        			images : images,
 			        			description : val.description,
@@ -303,7 +305,7 @@ class SubadminManager {
 	        	reject(error);
 	        }
 	    })
-  }      
+    }      
 
 	complaintsList(req){
 	    return new Promise(async (resolve, reject)=>{
@@ -456,6 +458,123 @@ class SubadminManager {
 	        }
 	    })
 	}							
+
+	work(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+	      		let data = [];
+	      		let count = 0; 
+		        let work  = await this.Tasks.findAll(
+		        	{where: req,
+		        		include: [{
+							model : this.Tasksmedia,
+							as : 'Media'
+						}],
+						order: [['id', 'DESC']]
+					}
+				);
+				if(work.length>0){
+					asyncLoop(work, async (val, next)=>{
+						
+				        let commentsCount = await this.Comments.count({where : { post_id:val.id, status : 2 } });
+
+				        let jsonData = {
+				        	id : val.id,
+				        	commentsCount : commentsCount,
+				        	sub_admin_id: val.sub_admin_id,
+				            title: val.title,
+				            description: val.description,
+				            type: val.type,
+				            category: val.category,
+				            createdAt: val.createdAt,
+				            updatedAt: val.updatedAt,
+				            Media: val.Media
+	            		}
+				        //console.log(val);
+				        data.push(jsonData);
+				        if(count == work.length-1){
+				        	console.log(data);
+				        	resolve(data);
+				        }
+				        next();
+				        count++;			        
+				    })    
+				}else{
+					resolve(data);
+				}	
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}		
+
+	home(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+	      		let data;
+	      		let complaintStatus = false;
+	      		let appointmentsStatus = false;
+		        let eventsStatus = false;
+		        let  events = await this.Events.findAll({
+		        	where: {
+		        		createdAt   : { $gt: new Date(Date.now() - (24 * 60 * 60 * 1000) ) },
+		        		sub_admin_id : req.sub_admin_id
+		        	}
+		        });
+		        if(events.length>0){
+		        	eventsStatus = true;	
+		        }
+		        let  complaints = await this.Complaints.findAll({
+		        	where: {
+		        		read_status  : 0, 
+		        		user_id : req.userId
+		        	}
+		        });
+
+		        if(complaints.length>0){
+		        	complaintStatus = true
+		        }
+		        console.log(complaintStatus);
+		        let  appointments = await this.Appointments.findAll({
+		        	where: {
+		        		read_status  : 0, 
+		        		user_id : req.userId
+		        	}
+		        });
+		        if(appointments.length>0){
+		        	appointmentsStatus = true
+		        }
+		        console.log(appointmentsStatus);
+		        let  galleryId = await this.Gallery.findAll({
+		        	attributes: ['id'],
+		        	where: {
+		        		sub_admin_id : req.sub_admin_id
+		        	},
+		        	raw : true
+		        });
+		        let ids= [];
+		        await galleryId.forEach(element => console.log(ids.push(element.id)));
+		        let  gallery = await this.Gallerymedia.findAll({
+		        	attributes: ['media_url'],
+		        	where: {
+		        		gallery_id : ids,		        		
+		        	},
+		        	raw : true,
+		        	limit : 5
+		        });
+		        data = {
+		        	complaintStatus : complaintStatus,
+		        	eventsStatus : eventsStatus,
+		        	appointmentsStatus : appointmentsStatus,
+		        	images : gallery
+		        }	
+
+		        resolve(data);
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}		
 }
 
 module.exports  = SubadminManager;	

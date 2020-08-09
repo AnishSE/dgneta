@@ -174,7 +174,7 @@ module.exports = (app, wagner) => {
                     "first_name" : req.body.first_name,
                     "last_name" : req.body.last_name,
                     "email" : req.body.email,
-                    "password" : md5(req.body.password),
+                    "password" : req.body.password,
                     "present_position" : req.body.present_position
                 }
                 

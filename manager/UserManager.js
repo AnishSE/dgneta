@@ -62,7 +62,11 @@ class UserManager {
 	    return new Promise(async (resolve, reject)=>{
 	    	console.log(req);
 	      	try{
-		        let user  = await this.Complaints.findAll(req,{raw:true});
+		        let user  = await this.Complaints.findAll({where:req,
+		        order: [
+            		['id', 'DESC'],
+        		],
+        	});
 		        resolve(user)
 	      	} catch(error){
 	      		reject(error);
@@ -257,10 +261,13 @@ class UserManager {
 	addComplaint(req){
 	    return new Promise(async (resolve, reject)=>{
 	      	try{
+	      		let media_type = req.file.mimetype.split('/')
+
 	      		let saveMediaS3  = await this.saveMediaS3(req);
 	      		let complaintObj = {
 	      			user_id : req.body.userId,
 	      			media_url : saveMediaS3,
+	      			media_type : media_type[0],
 	      			message : req.body.message,
 	      			title : req.body.title,
 	      			sub_admin_id : req.body.sub_admin_id

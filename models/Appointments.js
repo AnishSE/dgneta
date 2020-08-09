@@ -44,7 +44,14 @@ module.exports      = function(sequelize, DataTypes) {
       type          : DataTypes.INTEGER(11),
       allowNull     : false,
       defaultValue  : 1
-    },                                             
+    },  
+
+    read_status         : {
+      type          : DataTypes.INTEGER(11),
+      allowNull     : false,
+      defaultValue  : 1
+    },  
+
     createdAt: {
       type          : DataTypes.DATE,
       allowNull     : true,

@@ -4,25 +4,24 @@ module.exports      = function(sequelize, DataTypes) {
       type          : DataTypes.INTEGER(11),
       allowNull     : false,
       primaryKey    : true,
-      autoIncrement : true,
-      // references    : {
-      //   model       : 'media',
-      //   key         : 'uploaded_by' 
-      // }      
-     
+      autoIncrement : true,     
     },
     user_id       : {
       type          : DataTypes.INTEGER(11),
       allowNull     : false
     },
-    sub_admin_id       : {
+    sub_admin_id  : {
       type          : DataTypes.INTEGER(11),
       allowNull     : false
     },
     media_url       : {
       type          : DataTypes.STRING(255),
       allowNull     : false
-    },       
+    },
+    media_type       : {
+      type          : DataTypes.STRING(255),
+      allowNull     : true
+    },            
     message        : {
       type          : DataTypes.STRING(255),
       allowNull     : false
@@ -33,6 +32,11 @@ module.exports      = function(sequelize, DataTypes) {
       allowNull     : false,
     },
     status         : {
+      type          : DataTypes.INTEGER(11),
+      allowNull     : false,
+      defaultValue  : 1
+    },  
+    read_status         : {
       type          : DataTypes.INTEGER(11),
       allowNull     : false,
       defaultValue  : 1

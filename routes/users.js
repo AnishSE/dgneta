@@ -87,14 +87,16 @@ module.exports = (app, wagner) => {
             const params = {
             	post_id : req.body.postId,
             	message : req.body.message,
-            	user_id : req.body.userId
+            	user_id : req.body.userId,
+            	status  : req.body.status
             }
 
             const comment = await wagner.get('UserManager').addComment(params);  
             if(comment){
             	res.status(HTTPStatus.OK).json({ success: '1', message: "success", data: ''});  
+            }else{
+            	res.status(HTTPStatus.OK).json({ success: '0', message: "failure", data: ''});	
             }
-            res.status(HTTPStatus.OK).json({ success: '0', message: "failure", data: ''});  
         }catch(e){
             console.log(e);
             res.status(500).json({ success: '0', message: "failure", data: e });
@@ -306,5 +308,68 @@ module.exports = (app, wagner) => {
         }    
     });
 
+
+    router.post('/work', [
+        check('sub_admin_id').notEmpty().withMessage('sub_admin_id required').bail(),
+    ], async (req, res, next)=> {
+        try{ 
+            let errors = validationResult(req);
+            let params;
+            if(!errors.isEmpty()){
+                let lasterr = errors.array().pop();
+                lasterr.message = lasterr.msg + ": " + lasterr.param.replace("_"," ");
+                return res.status(405).json({ success: '0', message: "failure", data: lasterr });
+            }    
+            if(req.body.category){
+	            params = {
+	                sub_admin_id : req.body.sub_admin_id,
+	                category     : req.body.category,
+	                type         : req.body.type  
+	            }
+	        }else{
+	            params = {
+	                sub_admin_id : req.body.sub_admin_id,
+	                type         : req.body.type  
+	            }	        	
+	        } 
+            const admin = await wagner.get('SubadminManager').work(params);  
+            
+            if(admin.lenght>0){
+                res.status(HTTPStatus.OK).json({ success: '1', message: "success", data: admin});  
+            }else{
+                res.status(HTTPStatus.OK).json({ success: '1', message: "success", data: admin });
+            }
+
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });
+
+    router.post('/home', [
+        check('userId').notEmpty().withMessage('userId required').bail(),
+        check('sub_admin_id').notEmpty().withMessage('sub_admin_id required').bail(),
+    ], async (req, res, next)=> {
+        try{
+            let errors = validationResult(req);
+            let params;
+            if(!errors.isEmpty()){
+                let lasterr = errors.array().pop();
+                lasterr.message = lasterr.msg + ": " + lasterr.param.replace("_"," ");
+                return res.status(405).json({ success: '0', message: "failure", data: lasterr });
+            }
+
+            const home = await wagner.get('SubadminManager').home(req.body);  
+            
+            if(home){
+                res.status(HTTPStatus.OK).json({ success: '1', message: "success", data: home});  
+            }else{
+                res.status(HTTPStatus.OK).json({ success: '1', message: "success", data: '' });
+            }                        	
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });     
 	return router;
 }
