@@ -4,3 +4,4 @@ module.exports = function(wagner) {
     return new MailHelper(wagner);
   }); 
 };
+

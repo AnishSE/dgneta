@@ -45,7 +45,6 @@ module.exports      = function(sequelize, DataTypes) {
       allowNull     : false,
       defaultValue  : 1
     },  
-
     read_status         : {
       type          : DataTypes.INTEGER(11),
       allowNull     : false,

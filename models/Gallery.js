@@ -49,8 +49,7 @@ module.exports      = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Gallery.hasMany(models.Gallerymedia, {
-            foreignKey : 'gallery_id',
-            
+            foreignKey : 'gallery_id',            
             as:'Media'
         });         
       }
