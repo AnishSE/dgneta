@@ -1,0 +1,67 @@
+.container{
+  width:700px;
+}
+.form-group label{
+	font-weight: 800
+}
+.modal-header{
+	background-color:#e18932;
+	color:white;
+}
+select.error{
+	width: 100%;
+    font-size: 16px;
+}
+label.error{
+	color:red;
+	font-size: 13px;
+	width:100%;
+	text-align: center;
+}
+input.error{
+	font-size:16px;
+	line-height: 1.5;
+	width:100%;	
+}
+.successmsg{
+	background-color:green;
+	color:white;
+	text-align: center;
+}
+.errormsg{
+	background-color:#E04040;
+	color:white;
+	text-align: center;
+}
+.view_profile_detail, .edit_profile_detail{
+	margin-bottom: 50px;
+}
+.view_profile_detail .head {
+	font-weight: 700;
+	font-size: 18px;
+	line-height: 2;
+}
+.view_profile_detail .row_value{	
+	font-size: 18px;
+	line-height: 2;
+}
+.edit_profile_detail label{
+	width: 100%;
+	font-weight: 700;
+
+}
+.edit_profile_detail input{
+	width: 100%;
+	margin-bottom: 15px;
+}
+.dataTables_length{
+	width: 50%;
+    float: left;
+}
+.dataTables_filter{
+	width: 50%;
+    float: right;
+}
+.text-red{
+	color:red;
+}

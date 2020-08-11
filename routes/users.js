@@ -308,7 +308,6 @@ module.exports = (app, wagner) => {
         }    
     });
 
-
     router.post('/work', [
         check('sub_admin_id').notEmpty().withMessage('sub_admin_id required').bail(),
     ], async (req, res, next)=> {
@@ -321,17 +320,17 @@ module.exports = (app, wagner) => {
                 return res.status(405).json({ success: '0', message: "failure", data: lasterr });
             }    
             if(req.body.category){
-	            params = {
-	                sub_admin_id : req.body.sub_admin_id,
-	                category     : req.body.category,
-	                type         : req.body.type  
-	            }
-	        }else{
-	            params = {
-	                sub_admin_id : req.body.sub_admin_id,
-	                type         : req.body.type  
-	            }	        	
-	        } 
+                params = {
+                    sub_admin_id : req.body.sub_admin_id,
+                    category     : req.body.category,
+                    type         : req.body.type  
+                }
+            }else{
+                params = {
+                    sub_admin_id : req.body.sub_admin_id,
+                    type         : req.body.type  
+                }               
+            } 
             const admin = await wagner.get('SubadminManager').work(params);  
             
             if(admin.lenght>0){
@@ -365,11 +364,11 @@ module.exports = (app, wagner) => {
                 res.status(HTTPStatus.OK).json({ success: '1', message: "success", data: home});  
             }else{
                 res.status(HTTPStatus.OK).json({ success: '1', message: "success", data: '' });
-            }                        	
+            }                           
         }catch(e){
             console.log(e);
             res.status(500).json({ success: '0', message: "failure", data: e });
         }    
-    });     
+    });  
 	return router;
 }
