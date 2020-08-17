@@ -16,7 +16,7 @@ module.exports      = function(sequelize, DataTypes) {
       allowNull     : false
     },
     time            : {
-      type          : DataTypes.TIME,
+      type          : DataTypes.STRING(255),
       allowNull     : false
     },
     subject         : {

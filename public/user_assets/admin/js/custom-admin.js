@@ -163,7 +163,8 @@
     // });
 
     $('input[name="datepicker"]').datetimepicker({
-        format: 'YYYY-MM-DD'
+        format: 'YYYY-MM-DD',
+        minDate: new Date(),
     });
 
     $('input[name="timepicker"]').datetimepicker({

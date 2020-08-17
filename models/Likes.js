@@ -1,5 +1,5 @@
 module.exports      = function(sequelize, DataTypes) {
-  var Tasks         = sequelize.define('Tasks', {
+  var Likes         = sequelize.define('Likes', {
     id              : {
       type          : DataTypes.INTEGER(11),
       allowNull     : false,
@@ -11,31 +11,24 @@ module.exports      = function(sequelize, DataTypes) {
       // }      
      
     },
-
+    post_id            : {
+      type          : DataTypes.INTEGER(11),
+      allowNull     : false
+    },
     sub_admin_id    : {
       type          : DataTypes.INTEGER(11),
       allowNull     : false
     },
-    title            : {
-      type          : DataTypes.STRING(255),
+    user_id    : {
+      type          : DataTypes.INTEGER(11),
       allowNull     : false
     },
-    description        : {
-      type          : DataTypes.STRING(255),
-      allowNull     : true
-    },      
-    type            : {
-      type          : DataTypes.STRING(255),
-      allowNull     : true
-    }, 
-    funds           : {
-      type          : DataTypes.STRING(255),
-      allowNull     : true
-    },       
-    category        : {
-      type          : DataTypes.STRING(255),
-      allowNull     : true
-    },                                             
+    status    : {
+      type          : DataTypes.INTEGER(11),
+      allowNull     : false
+    },    
+
+                                           
     createdAt: {
       type          : DataTypes.DATE,
       allowNull     : true,
@@ -48,7 +41,7 @@ module.exports      = function(sequelize, DataTypes) {
     }
   },  
    {
-    tableName       : 'tasks',
+    tableName       : 'likes',
     paranoid        : true,
     deletedAt       : 'deletedAt',
     charset         : 'utf8',
@@ -58,13 +51,12 @@ module.exports      = function(sequelize, DataTypes) {
 
     classMethods: {
       associate: function(models) {
-        Tasks.hasMany(models.Tasksmedia, {
-            foreignKey : 'task_id',
-            
-            as:'Media'
-        });         
+        // Gallery.hasMany(models.Gallerymedia, {
+        //     foreignKey : 'likes',            
+        //     as:'Media'
+        // });         
       }
     }    
   });
-  return Tasks;
+  return Likes;
 };

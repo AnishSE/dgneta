@@ -1,5 +1,5 @@
 {
-    "app_route": "http://localhost:3003/",
+    "app_route": "http://3.7.15.225:3003/",
     "site_name": "DgNeta",  
     "google_analytics": "",
     "PORT": "3003",

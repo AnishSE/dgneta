@@ -28,6 +28,7 @@
                       <th>Name</th>
                       <th>Email</th>
                       <th>Position</th>
+                      <th>Password</th>
                       <th>Action</th>                      
                     </tr>
                   </thead>
@@ -37,6 +38,7 @@
                       <th>Name</th>
                       <th>Email</th>
                       <th>Position</th>
+                      <th>Password</th>
                       <th>Action</th>                      
                     </tr>
                   </tfoot>
@@ -47,6 +49,7 @@
                         <td><a style="color:blue;" href="javascript:void(0)"><%=data[i].first_name+ ' '+data[i].last_name %></a></td>
                         <td><%=data[i].email %></td>
                         <td><%=data[i].present_position %></td>
+                        <td><%=data[i].password %></td>
                         <td>
 	                        <% if(data[i].status === 1){ %>
 	                        	<a style="background-color:#e18932;color:white;padding:5px;" href="/admin/subAdminActivateDeactivate/<%=data[i].id%>/<%=data[i].status%>">De-Activate</a>
@@ -94,7 +97,7 @@
                 </div>              
                 <div class="form-group">
                   <label>Password</label>
-                  <input type="password"  class="form-control"  name="password" placeholder="Enter Password"/>
+                  <input type="password" class="form-control form-control-user input-password" id="password" aria-describedby="password" placeholder="Password" name="password">
                 </div>
                 <div class="form-group">
                   <label>Present Position</label>

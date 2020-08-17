@@ -8,14 +8,14 @@ jQuery(document).ready(function () {
 		        	},           
 		            password: {
 		                required: true,
-		                minlength: 8
+		                minlength: 6
 		            }
 		        },
 		        messages: { 
 		        	email: "Please enter email",
 			        password: {
 			            required: "Please provide a password",
-			            minlength: "Password must be at least 8 characters long"
+			            minlength: "Password must be at least 6 characters long"
 			        }		            
 		        },
 		        submitHandler: function(form) {		        	

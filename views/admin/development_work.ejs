@@ -58,17 +58,17 @@ input[type=file]{
                         <td style="width:10%"><%=data[i].category %></td>
                         <td style="width:15%">
                         <% if(data[i].Media){ %>
-                          <% //if(data[i].Media[0].media_url !='' && data[i].Media[0].media_url !=null) {%>
-                            <div class="row m-0">
-                              <div class="small-12 medium-2 large-2 columns">
-                                <div class="circle">                          
-                                  <img class="profile-pic" src="<% // data[i].Media[0].media_url %>">
-                                </div>
-                              </div>
-                            </div>
-                          <% // } 
-                        }%>
-                        </td> 
+                          <div class="w3-content w3-display-container">
+                            <%for(var j=0; j<data[i].Media.length; j++) {%>                           
+                              <img class="mySlides" src="<%=data[i].Media[j].media_url%>" style="width:100%">
+                            <%}%>
+                            <div class="divs_btn "style="margin-left: 36px;margin-top: 5px;">
+                              <button align="center" class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+                              <button align="center" class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+                            <div>                            
+                          </div>     
+                        <%}%>
+                        </td>  
                         <td style="width:20%">
                           <a class="viewWorkCommentBtn" style="background-color:#e18932;color:white;padding:5px;" href="javascript:void(0)" data-task_id="<%=data[i].id %>" data-toggle="modal" data-target="#viewCommentModal">View Comment</a>
                         </td> 
@@ -272,3 +272,23 @@ input[type=file]{
   </div> 
   <!-- //View Comment Modal -->
 <!-- End of Main Content -->
+
+      <script>
+        var slideIndex = 1;
+        showDivs(slideIndex);
+
+        function plusDivs(n) {
+          showDivs(slideIndex += n);
+        }
+
+        function showDivs(n) {
+          var i;
+          var x = document.getElementsByClassName("mySlides");
+          if (n > x.length) {slideIndex = 1}
+          if (n < 1) {slideIndex = x.length}
+          for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";  
+          }
+          x[slideIndex-1].style.display = "block";  
+        }
+      </script> 

@@ -229,6 +229,9 @@ class UserManager {
 			        			media : val.media_url,
 			        			description : val.description,
 			        			totalJoined : totalJoined.length,
+			        			location    : val.location,
+			        			date : val.date,
+			        			time : val.time,
 			        			joined : 1
 			        		}
 
@@ -239,6 +242,9 @@ class UserManager {
 			        			media : val.media_url,
 			        			description : val.description,
 			        			totalJoined : totalJoined.length,
+			        			location    : val.location,
+			        			date : val.date,
+			        			time : val.time,			        			
 			        			joined : 0
 			        		}
 			        		dataArray.push(data);		        		

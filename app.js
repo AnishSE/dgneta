@@ -50,6 +50,8 @@ app.use(function(req, res, next) {
 
   if( string_array['1'] == 'admin'  && (string_array['2'] == 'login' || string_array['2'] == 'forgotPassword' )){
       app.set('layout', 'layout');
+  }else if(string_array['1'] == 'admin'  && string_array['2'] == 'resetPassword') {
+    app.set('layout', 'layoutReset');
   }else if(string_array['1'] == 'admin'){
       app.set('layout', 'adminLayout');
   }else{

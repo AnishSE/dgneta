@@ -42,7 +42,7 @@ module.exports = (app, wagner) => {
             }else{
                 let params = {
                     email : req.body.email,
-                    password : md5(req.body.password)
+                    password : req.body.password
                 }
             	  const admin = await wagner.get('SubadminManager').findOne(params);
                 if(admin){
@@ -53,7 +53,7 @@ module.exports = (app, wagner) => {
                 } else {
                     // req.flash('errormsg', 'Incorrect Username or Password.');
                     // res.redirect('/admin/login');      
-                    res.status(403).json({ success: '0', message: "failure", errormsg:"Incorrect Username or Password."});         
+                    res.status(200).json({ success: '0', message: "failure", errormsg:"Incorrect Username or Password."});         
                 }
             }
         }catch(e){
@@ -90,7 +90,7 @@ module.exports = (app, wagner) => {
         }else{
             // req.flash('errormsg', 'Email id not registered.');
             // res.redirect('/admin/forgotPassword');   
-            res.status(500).json({ success: '0', message: "failure", errormsg: "Email id not registered."});                                           
+            res.status(200).json({ success: '0', message: "failure", errormsg: "Email id not registered."});                                           
         }      
     });
 
@@ -193,7 +193,7 @@ module.exports = (app, wagner) => {
 
     router.post('/changePassword', session_auth.admin, async (req, res, next)=> {
         try{
-            let params = {password : md5(req.body.new_password)};
+            let params = {password : req.body.new_password};
             let conds = {id : req.session.currentUser.id} /*Set from sessions*/
             const changePassword = await wagner.get('SubadminManager').update(params, conds);
             console.log(changePassword);
@@ -361,6 +361,56 @@ module.exports = (app, wagner) => {
         }    
     }); 
         
+    router.get('/resetPassword/:id',  (req, res, next)=> {
+            res.render('admin/resetPassword');      
+    });
+
+    router.get('/events', session_auth.admin, async (req, res, next)=> {
+        let conds = {sub_admin_id : req.session.currentUser.id}
+        const events = await wagner.get('SubadminManager').events(conds);
+        res.render('admin/events', {data:events, moment:moment});      
+    });
+
+    router.post('/addEvent', upload.single('fileInput'), session_auth.admin, async (req, res, next)=> {
+        const media_url = await wagner.get('UserManager').saveMediaS3(req);
+
+        let request = {
+            sub_admin_id : req.session.currentUser.id,
+            location : req.body.location,
+            description : req.body.description,
+            date : req.body.datepicker,
+            time : req.body.timepicker,
+            media_url : media_url
+        }
+        const events = await wagner.get('SubadminManager').addEvents(request);
+        res.redirect('/admin/events')    
+    });
+
+    router.get('/deleteEvents/:id', session_auth.admin, async (req, res, next)=> {
+        try{ 
+            let conds = {id : req.params.id} /*Set from sessions*/
+            const update = await wagner.get('SubadminManager').deleteEvents(conds);
+            
+            res.redirect('/admin/events');  
+                          
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });
+
+    router.post('/resetPassword/:id', async (req, res, next)=> {
+        try{ 
+            let conds = {id : req.params.id} /*Set from sessions*/
+            const update = await wagner.get('SubadminManager').update(req.body, conds);
+            
+            res.redirect('/admin/login');  
+                          
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });
 
     router.get('/acceptRejectAppointment/:appointmentId/:status', session_auth.admin, async (req, res, next)=> {
         try{ 
@@ -370,6 +420,24 @@ module.exports = (app, wagner) => {
             if(appointmentUpdate){
                 //console.log(appointmentList);
                 res.redirect('/admin/appointmentList');  
+                // res.status(200).json({ success: '1', message: "success", data: appointmentUpdate });
+            }else{
+                res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    
+            }
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });
+
+    router.get('/acceptRejectComplaint/:complaintId/:status', session_auth.admin, async (req, res, next)=> {
+        try{ 
+            let params = {status : req.params.status };
+            let conds = {id: req.params.complaintId }; 
+            const appointmentUpdate = await wagner.get('SubadminManager').acceptRejectComplaint(params, conds);
+            if(appointmentUpdate){
+                //console.log(appointmentList);
+                res.redirect('/admin/complaintsList');  
                 // res.status(200).json({ success: '1', message: "success", data: appointmentUpdate });
             }else{
                 res.status(403).json({ success: '0', message: "failure", errormsg: 'Something entered wrong.' });                    

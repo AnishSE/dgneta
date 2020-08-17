@@ -19,7 +19,8 @@ class SubadminManager {
     	this.Tasks = wagner.get('Tasks');
     	this.Tasksmedia = wagner.get('Tasksmedia');
     	this.Complaints = wagner.get('Complaints');
-    	this.Events = wagner.get('Events')
+    	this.Events = wagner.get('Events');
+    	this.Likes = wagner.get('Likes');
     }
 
 	findOne(req){
@@ -33,7 +34,7 @@ class SubadminManager {
 	    })
 	}
 
-	gallery(req){
+	gallery(req, params){
 	    return new Promise(async (resolve, reject)=>{
 	      	try{
 	      		let dataArray = [];
@@ -45,11 +46,16 @@ class SubadminManager {
 			        asyncLoop(gallery, async (val, next)=>{
 			        	let images = await this.Gallerymedia.findAll({where : { gallery_id:val.id } });
 			        	let commentsCount = await this.Comments.count({where : { post_id:val.id, status : 1 } });
+				        let likeCount = await this.Likes.count({where : { post_id:val.id,  status : 1 } });
+
+				        let isLike = await this.Likes.findOne({where : { post_id:val.id, user_id : params, status : 1 } });			        	
 			        		data = {
 			        			images : images,
 			        			description : val.description,
 			        			title : val.title,
-			        			commentsCount : commentsCount
+			        			commentsCount : commentsCount,
+			        			likeCount : likeCount,
+			        			isLike : isLike!=(null||undefined) ? 1 : 0
 			        		}
 
 			        		dataArray.push(data);
@@ -175,7 +181,7 @@ class SubadminManager {
 	            from: config.get('MAIL_USERNAME'),
 	            to: req.email,
 	            subject: 'Reset Password Link.',
-	            html: '<b>HI</b><br> <p>Greetings for the day.</p><br> <p>Please click Reset Password to reset your password.</p>  <p><a href='+config.get('app_route')+'users/resetPassword/'+ req.id+' <button>Reset Password</button></a></p> <br>Regards.<br> <p>Team '+config.get('site_name')+'.</p>'
+	            html: '<b>HI</b><br> <p>Greetings for the day.</p><br> <p>Please click Reset Password to reset your password.</p>  <p><a href='+config.get('app_route')+'admin/resetPassword/'+ req.id+' <button>Reset Password</button></a></p> <br>Regards.<br> <p>Team '+config.get('site_name')+'.</p>'
 	          };
 	          const sendMailfunc = await this.Mail.sendMail(mailOptions);
 	          resolve(sendMailfunc);
@@ -305,7 +311,19 @@ class SubadminManager {
 	        	reject(error);
 	        }
 	    })
-    }      
+    } 
+
+	acceptRejectComplaint(req,conds){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let appointments  = await this.Complaints.update(req, {where : conds});
+		        resolve(appointments)
+	      	} catch(error){
+	      		console.log(error);
+	        	reject(error);
+	        }
+	    })
+    }
 
 	complaintsList(req){
 	    return new Promise(async (resolve, reject)=>{
@@ -459,7 +477,7 @@ class SubadminManager {
 	    })
 	}							
 
-	work(req){
+	work(req, params){
 	    return new Promise(async (resolve, reject)=>{
 	      	try{
 	      		let data = [];
@@ -478,6 +496,10 @@ class SubadminManager {
 						
 				        let commentsCount = await this.Comments.count({where : { post_id:val.id, status : 2 } });
 
+				        let likeCount = await this.Likes.count({where : { post_id:val.id,  status : 2 } });
+
+				        let isLike = await this.Likes.findOne({where : { post_id:val.id, user_id : params, status : 2 } });
+
 				        let jsonData = {
 				        	id : val.id,
 				        	commentsCount : commentsCount,
@@ -485,10 +507,14 @@ class SubadminManager {
 				            title: val.title,
 				            description: val.description,
 				            type: val.type,
+				            funds  : val.funds,
 				            category: val.category,
 				            createdAt: val.createdAt,
 				            updatedAt: val.updatedAt,
-				            Media: val.Media
+				            Media: val.Media,
+				            likeCount : likeCount,
+				            isLike : isLike!=(null||undefined) ? 1 : 0
+ 
 	            		}
 				        //console.log(val);
 				        data.push(jsonData);
@@ -574,7 +600,64 @@ class SubadminManager {
 	        	reject(error);
 	        }
 	    })
-	}		
+	}
+
+	like(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let like  = await this.Likes.create(req);
+		        resolve(like)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}
+
+	unLike(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let like  = await this.Likes.destroy({
+		        	where : {sub_admin_id: req.sub_admin_id, user_id:req.user_id, post_id : req.post_id}
+		        });
+		        resolve(like)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}	
+
+	events(conds){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let events  = await this.Events.findAll({where : conds});
+		        resolve(events)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}
+
+	addEvents(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let events  = await this.Events.create(req);
+		        resolve(events)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}
+
+	deleteEvents(req){
+	    return new Promise(async (resolve, reject)=>{
+	      	try{
+		        let events  = await this.Events.destroy({where : req});
+		        resolve(events)
+	      	} catch(error){
+	        	reject(error);
+	        }
+	    })
+	}						
 }
 
 

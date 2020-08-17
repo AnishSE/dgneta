@@ -286,6 +286,7 @@ module.exports = (app, wagner) => {
     /* POST Gallery API */
     router.post('/gallery', [
         check('adminId').notEmpty().withMessage('adminId required').bail(),
+        check('user_id').notEmpty().withMessage('user_id required').bail(),
     ], async (req, res, next)=> {
         try{ 
             let errors = validationResult(req);
@@ -298,7 +299,7 @@ module.exports = (app, wagner) => {
                 id          : req.body.adminId
             }
 
-            const admin = await wagner.get('SubadminManager').gallery(params);  
+            const admin = await wagner.get('SubadminManager').gallery(params, req.body.user_id);  
             
             res.status(HTTPStatus.OK).json(admin);  
 
@@ -310,6 +311,7 @@ module.exports = (app, wagner) => {
 
     router.post('/work', [
         check('sub_admin_id').notEmpty().withMessage('sub_admin_id required').bail(),
+        check('user_id').notEmpty().withMessage('user_id required').bail(),
     ], async (req, res, next)=> {
         try{ 
             let errors = validationResult(req);
@@ -323,15 +325,18 @@ module.exports = (app, wagner) => {
                 params = {
                     sub_admin_id : req.body.sub_admin_id,
                     category     : req.body.category,
-                    type         : req.body.type  
+                    type         : req.body.type,
+                    //user_id      : req.body.user_id  
                 }
             }else{
                 params = {
                     sub_admin_id : req.body.sub_admin_id,
-                    type         : req.body.type  
+                    type         : req.body.type,
+                    //user_id      : req.body.user_id,
+                    //user_id      : req.body.user_id  
                 }               
             } 
-            const admin = await wagner.get('SubadminManager').work(params);  
+            const admin = await wagner.get('SubadminManager').work(params, req.body.user_id);  
             
             if(admin.lenght>0){
                 res.status(HTTPStatus.OK).json({ success: '1', message: "success", data: admin});  
@@ -369,6 +374,36 @@ module.exports = (app, wagner) => {
             console.log(e);
             res.status(500).json({ success: '0', message: "failure", data: e });
         }    
-    });  
+    });
+
+    router.post('/like', [
+        check('post_id').notEmpty().withMessage('post_id required').bail(),
+        check('sub_admin_id').notEmpty().withMessage('sub_admin_id required').bail(),
+    ], async (req, res, next)=> {
+        try{
+            let errors = validationResult(req);
+            let params;
+            let like;
+            if(!errors.isEmpty()){
+                let lasterr = errors.array().pop();
+                lasterr.message = lasterr.msg + ": " + lasterr.param.replace("_"," ");
+                return res.status(405).json({ success: '0', message: "failure", data: lasterr });
+            }
+            if(req.body.like_status==1){
+                like = await wagner.get('SubadminManager').like(req.body);  
+            }else{
+                like = await wagner.get('SubadminManager').unLike(req.body); 
+            }
+            
+            if(like){
+                res.status(HTTPStatus.OK).json({ success: '1', message: "success", data:'' });  
+            }else{
+                res.status(500).json({ success: '0', message: "failure", data: '' });
+            }                           
+        }catch(e){
+            console.log(e);
+            res.status(500).json({ success: '0', message: "failure", data: e });
+        }    
+    });      
 	return router;
 }
