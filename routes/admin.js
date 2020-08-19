@@ -38,7 +38,7 @@ module.exports = (app, wagner) => {
                 
                 // req.flash('errormsg', 'Some error occured please try again.');
                 // res.redirect('/admin/login');
-                res.status(403).json({ success: '0', message: "failure", errormsg:"Some error occured please try again."});         
+                res.status(200).json({ success: '0', message: "failure", errormsg:"Some error occured please try again."});         
             }else{
                 let params = {
                     email : req.body.email,
@@ -58,7 +58,7 @@ module.exports = (app, wagner) => {
             }
         }catch(e){
             console.log(e);
-            res.status(500).json({ success: '0', message: "failure", data: e });
+            res.status(200).json({ success: '0', message: "failure", errormsg: e });
         }    
     });    
 

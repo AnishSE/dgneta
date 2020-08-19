@@ -24,6 +24,7 @@ jQuery(document).ready(function () {
 			                type: form.method,
 			                data: $(form).serialize(),
 			                success: function(response) {
+                        // alert(response.success);
 			                	if(response.success == 1){
 			                    	// $('.successmsg').html(response.successmsg);
 			                    	window.location.href = 'dashboard';															
@@ -72,7 +73,7 @@ jQuery(document).ready(function () {
 		        }
 	}); 
 
-    $('.createSubAdminForm').validate({    
+  $('.createSubAdminForm').validate({    
 			        rules: {
 			          first_name: "required",
 			          last_name: "required",
@@ -184,9 +185,9 @@ jQuery(document).ready(function () {
                         //     }            
                         // });   
                     }
-    });
+  });
 
-    $('.addMoreMediaForm').validate({    
+  $('.addMoreMediaForm').validate({    
                     rules: {
                       fileInput:"required"
                     },
@@ -196,9 +197,9 @@ jQuery(document).ready(function () {
                     submitHandler: function(form) {
                         form.submit();     
                     }
-    });
+  });
 
-    $('.addMoreWorkForm').validate({    
+  $('.addMoreWorkForm').validate({    
                     rules: {
                       fileInput:"required"
                     },
@@ -208,10 +209,31 @@ jQuery(document).ready(function () {
                     submitHandler: function(form) {
                         form.submit();     
                     }
-    });
+  });
 
-    $('.addWorkForm').validate({    
-                    rules: {                      
+  $('.addWorkForm').validate({    
+              rules: {                      
+                  category: {
+			          	required:true,
+			          	validateCategory:true
+			          },
+                title: "required",
+                description: "required", 	
+                fileInput:"required"
+              },
+                    messages: {
+                      category: "Please select category",
+                      title: "Please enter title",
+                      description: "Please enter description",
+                      fileInput: "Please choose media"
+                    },
+                    submitHandler: function(form) {
+                        form.submit();     
+                    }
+  });
+
+  $('.editWorkForm').validate({    
+              rules: {
                       category: {
 			          	required:true,
 			          	validateCategory:true
@@ -229,30 +251,9 @@ jQuery(document).ready(function () {
                     submitHandler: function(form) {
                         form.submit();     
                     }
-    });
+  });
 
-    $('.editWorkForm').validate({    
-                    rules: {
-                      category: {
-			          	required:true,
-			          	validateCategory:true
-			          },
-                      title: "required",
-                      description: "required", 	
-                      fileInput:"required"
-                    },
-                    messages: {
-                      category: "Please select category",
-                      title: "Please enter title",
-                      description: "Please enter description",
-                      fileInput: "Please choose media"
-                    },
-                    submitHandler: function(form) {
-                        form.submit();     
-                    }
-    });
-
-    $('.addSocialWorkForm').validate({    
+  $('.addSocialWorkForm').validate({    
                     rules: {                      
                       title: "required",
                       description: "required", 	
@@ -266,9 +267,9 @@ jQuery(document).ready(function () {
                     submitHandler: function(form) {
                         form.submit();     
                     }
-    });
+  });
 
-    $('.editSocialWorkForm').validate({    
+  $('.editSocialWorkForm').validate({    
                     rules: {                      
                       title: "required",
                       description: "required", 	
@@ -282,15 +283,35 @@ jQuery(document).ready(function () {
                     submitHandler: function(form) {
                         form.submit();     
                     }
-    });
+  });
 
-    $(".upload-button").on('click', function() {
+  $('.addEventForm').validate({    
+    rules: {
+      location: "required",                
+      description: "required",
+      datepicker: "required",
+      timepicker: "required",  
+      fileInput: "required"
+    },
+    messages: {
+      location: "Please select location",      
+      description: "Please enter description",
+      datepicker: "Please select appointment date",
+      timepicker: "Please select appointment time", 
+      fileInput: "Please choose media"
+    },
+    submitHandler: function(form) {
+      form.submit();     
+    }
+  });
+
+  $(".upload-button").on('click', function() {
         $(".file-upload").click();
-    });
+  });
 
-    $(".cover-upload-button").on('click', function() {
+  $(".cover-upload-button").on('click', function() {
         $(".file-cover-upload").click();
-    });
+  });
 
 
     $('.upload_photo').hide();
