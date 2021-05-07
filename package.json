@@ -39,7 +39,7 @@
     "nodemon": "^2.0.4",
     "razorpay": "^2.0.6",
     "sequelize": "^3.35.1",
-    "underscore": "^1.10.2",
+    "underscore": "^1.12.1",
     "wagner-core": "^0.2.0"
   }
 }
